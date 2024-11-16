@@ -1,4 +1,5 @@
-﻿using Core.MasterFile.Parser.Structures.Records.FieldStructures;
+﻿using System;
+using Core.MasterFile.Parser.Structures.Records.FieldStructures;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 
 namespace Core.MasterFile.Parser.Structures.Records
@@ -83,25 +84,56 @@ namespace Core.MasterFile.Parser.Structures.Records
         /// </summary>
         public readonly uint ImageSpaceReference;
 
-        public CELL(Record baseInfo, string editorID, LocalizedString name, ushort cellFlag, int xGridPosition,
-            int yGridPosition, Lighting cellLightingInfo, uint lightingTemplateReference, float nonOceanWaterHeight,
-            uint locationReference, uint waterReference, string waterEnvironmentMap, uint acousticSpaceReference,
-            uint musicTypeReference, uint imageSpaceReference) : base(baseInfo)
+        public CELL(CELLBuilder builder) : base(builder.BaseInfo)
         {
-            EditorID = editorID;
-            Name = name;
-            CellFlag = cellFlag;
-            XGridPosition = xGridPosition;
-            YGridPosition = yGridPosition;
-            CellLightingInfo = cellLightingInfo;
-            LightingTemplateReference = lightingTemplateReference;
-            NonOceanWaterHeight = nonOceanWaterHeight;
-            LocationReference = locationReference;
-            WaterReference = waterReference;
-            WaterEnvironmentMap = waterEnvironmentMap;
-            AcousticSpaceReference = acousticSpaceReference;
-            MusicTypeReference = musicTypeReference;
-            ImageSpaceReference = imageSpaceReference;
+            EditorID = builder.EditorID;
+            Name = builder.Name;
+            CellFlag = builder.CellFlag;
+            XGridPosition = builder.XGridPosition;
+            YGridPosition = builder.YGridPosition;
+            CellLightingInfo = builder.CellLightingInfo;
+            LightingTemplateReference = builder.LightingTemplateReference;
+            NonOceanWaterHeight = builder.NonOceanWaterHeight;
+            LocationReference = builder.LocationReference;
+            WaterReference = builder.WaterReference;
+            WaterEnvironmentMap = builder.WaterEnvironmentMap;
+            AcousticSpaceReference = builder.AcousticSpaceReference;
+            MusicTypeReference = builder.MusicTypeReference;
+            ImageSpaceReference = builder.ImageSpaceReference;
+        }
+    }
+
+    // ReSharper disable once InconsistentNaming
+    public class CELLBuilder
+    {
+        public Record BaseInfo;
+        public string EditorID;
+        public LocalizedString Name;
+        public ushort CellFlag;
+        public int XGridPosition;
+        public int YGridPosition;
+        public Lighting CellLightingInfo;
+        public uint LightingTemplateReference;
+        public float NonOceanWaterHeight;
+        public uint LocationReference;
+        public uint WaterReference;
+        public string WaterEnvironmentMap;
+        public uint AcousticSpaceReference;
+        public uint MusicTypeReference;
+        public uint ImageSpaceReference;
+        
+        private CELLBuilder() {}
+
+        public static CELLBuilder CreateAndConfigure(Action<CELLBuilder> configurator)
+        {
+            var builder = new CELLBuilder();
+            configurator(builder);
+            return builder;
+        }
+        
+        public CELL Build()
+        {
+            return new CELL(this);
         }
     }
 }

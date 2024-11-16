@@ -1,8 +1,12 @@
-﻿using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
+﻿using System;
+using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Model;
 
 namespace Core.MasterFile.Parser.Structures.Records
 {
+    /// <summary>
+    /// FURN records contain information on furniture.
+    /// </summary>
     // ReSharper disable once InconsistentNaming
     public class FURN : Record
     {
@@ -43,15 +47,40 @@ namespace Core.MasterFile.Parser.Structures.Records
         /// </summary>
         public readonly uint InteractionKeyword;
 
-        public FURN(Record baseInfo, string editorID, LocalizedString inGameName, Model modelInfo,
-            byte workbenchType, byte workbenchSkill, uint interactionKeyword) : base(baseInfo)
+        public FURN(FURNBuilder builder) : base(builder.BaseInfo)
         {
-            EditorID = editorID;
-            InGameName = inGameName;
-            ModelInfo = modelInfo;
-            WorkbenchType = workbenchType;
-            WorkbenchSkill = workbenchSkill;
-            InteractionKeyword = interactionKeyword;
+            EditorID = builder.EditorID;
+            InGameName = builder.InGameName;
+            ModelInfo = builder.ModelInfo;
+            WorkbenchType = builder.WorkbenchType;
+            WorkbenchSkill = builder.WorkbenchSkill;
+            InteractionKeyword = builder.InteractionKeyword;
+        }
+    }
+
+    // ReSharper disable once InconsistentNaming
+    public class FURNBuilder
+    {
+        public Record BaseInfo;
+        public string EditorID;
+        public LocalizedString InGameName;
+        public Model ModelInfo;
+        public byte WorkbenchType;
+        public byte WorkbenchSkill;
+        public uint InteractionKeyword;
+        
+        private FURNBuilder() {}
+        
+        public FURNBuilder CreateAndConfigure(Action<FURNBuilder> configurator)
+        {
+            var builder = new FURNBuilder();
+            configurator(builder);
+            return builder;
+        }
+        
+        public FURN Build()
+        {
+            return new FURN(this);
         }
     }
 }

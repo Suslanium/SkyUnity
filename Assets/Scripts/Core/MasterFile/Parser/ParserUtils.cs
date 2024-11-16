@@ -1,5 +1,4 @@
 using System.IO;
-using Core.MasterFile.Parser.Structures.Records.FieldStructures;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 
 namespace Core.MasterFile.Parser
@@ -53,6 +52,11 @@ namespace Core.MasterFile.Parser
         {
             return new ColorRGBA(reader.ReadByte(), reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
         }
+        
+        public static ColorRGB ReadColorRGB(this BinaryReader reader)
+        {
+            return new ColorRGB(reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
+        }
 
         public static Float32ColorRGB ReadFloat32ColorRGB(this BinaryReader reader)
         {
@@ -62,6 +66,11 @@ namespace Core.MasterFile.Parser
         public static Float32Vector3 ReadFloat32Vector3(this BinaryReader reader)
         {
             return new Float32Vector3(reader.ReadFloat32(), reader.ReadFloat32(), reader.ReadFloat32());
+        }
+        
+        public static Int16Vector3 ReadInt16Vector3(this BinaryReader reader)
+        {
+            return new Int16Vector3(reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16());
         }
 
         public static LocalizedString ReadLocalizedString(this BinaryReader reader, ushort length, bool isFileLocalized)

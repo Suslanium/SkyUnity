@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Model;
 
@@ -45,17 +46,44 @@ namespace Core.MasterFile.Parser.Structures.Records
 
         public readonly List<uint> RandomTeleports;
 
-        public DOOR(Record baseInfo, string editorID, Model modelInfo, uint openSound, uint closeSound,
-            uint loopSound, byte flags, ObjectBounds bounds, List<uint> randomTeleports) : base(baseInfo)
+        public DOOR(DOORBuilder builder) : base(builder.BaseInfo)
         {
-            EditorID = editorID;
-            ModelInfo = modelInfo;
-            OpenSound = openSound;
-            CloseSound = closeSound;
-            LoopSound = loopSound;
-            Flags = flags;
-            Bounds = bounds;
-            RandomTeleports = randomTeleports;
+            EditorID = builder.EditorID;
+            ModelInfo = builder.ModelInfo;
+            OpenSound = builder.OpenSound;
+            CloseSound = builder.CloseSound;
+            LoopSound = builder.LoopSound;
+            Flags = builder.Flags;
+            Bounds = builder.Bounds;
+            RandomTeleports = builder.RandomTeleports;
+        }
+    }
+
+    // ReSharper disable once InconsistentNaming
+    public class DOORBuilder
+    {
+        public Record BaseInfo;
+        public string EditorID;
+        public Model ModelInfo;
+        public uint OpenSound;
+        public uint CloseSound;
+        public uint LoopSound;
+        public byte Flags;
+        public ObjectBounds Bounds;
+        public List<uint> RandomTeleports = new();
+        
+        private DOORBuilder() {}
+        
+        public static DOORBuilder CreateAndConfigure(Action<DOORBuilder> configurator)
+        {
+            var builder = new DOORBuilder();
+            configurator(builder);
+            return builder;
+        }
+        
+        public DOOR Build()
+        {
+            return new DOOR(this);
         }
     }
 }

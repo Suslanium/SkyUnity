@@ -53,10 +53,13 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\CELL.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\DOOR.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\DoorTeleport.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\ColorRGB.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\ColorRGBA.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\Float32ColorRGB.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\Float32Vector3.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\Int16Vector3.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\LocalizedString.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Landscape\TextureLayers.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Lighting.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Model\AlternateTextures.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Model\Model.cs" />
@@ -64,6 +67,18 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\PortalInfo.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Primitive.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FURN.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LAND.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LGTM.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LIGH.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LSCR.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LTEX.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\MSTT.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\REFR.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\STAT.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TES4.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TREE.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TXST.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\WRLD.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.27f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
