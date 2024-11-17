@@ -42,9 +42,14 @@ namespace Core.MasterFile.Parser
             return reader.ReadUInt32();
         }
 
-        public static string ReadZString(this BinaryReader reader, ushort length)
+        public static string ReadZString(this BinaryReader reader, int length)
         {
             return new string(reader.ReadChars(length)).TrimEnd(ZeroTerminator);
+        }
+        
+        public static string ReadString(this BinaryReader reader, int length)
+        {
+            return new string(reader.ReadChars(length));
         }
 
         // ReSharper disable once InconsistentNaming
@@ -73,7 +78,7 @@ namespace Core.MasterFile.Parser
             return new Int16Vector3(reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16());
         }
 
-        public static LocalizedString ReadLocalizedString(this BinaryReader reader, ushort length, bool isFileLocalized)
+        public static LocalizedString ReadLocalizedString(this BinaryReader reader, int length, bool isFileLocalized)
         {
             return isFileLocalized
                 ? new LocalizedString(reader.ReadUInt32())

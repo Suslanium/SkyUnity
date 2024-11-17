@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures;
 
 namespace Core.MasterFile.Parser.Structures.Records
@@ -21,22 +21,14 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
 
     // ReSharper disable once InconsistentNaming
-    public class LGTMBuilder
+    public class LGTMBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
         public Lighting LightingInfo;
         
-        private LGTMBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public static LGTMBuilder CreateAndConfigure(Action<LGTMBuilder> configurator)
-        {
-            var builder = new LGTMBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public LGTM Build()
+        public Record Build()
         {
             return new LGTM(this);
         }

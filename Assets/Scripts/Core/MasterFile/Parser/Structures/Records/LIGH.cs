@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Model;
 
@@ -77,7 +77,7 @@ namespace Core.MasterFile.Parser.Structures.Records
         public LIGH(LIGHBuilder builder) : base(builder.BaseInfo)
         {
             EditorID = builder.EditorID;
-            ModelInfo = builder.ModelInfo;
+            ModelInfo = builder.ModelInfo.Build();
             InventoryIconFilename = builder.InventoryIconFilename;
             MessageIconFilename = builder.MessageIconFilename;
             ItemName = builder.ItemName;
@@ -99,11 +99,10 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
 
     // ReSharper disable once InconsistentNaming
-    public class LIGHBuilder
+    public class LIGHBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
-        public Model ModelInfo;
+        public ModelBuilder ModelInfo = new();
         public string InventoryIconFilename;
         public string MessageIconFilename;
         public LocalizedString ItemName;
@@ -122,16 +121,9 @@ namespace Core.MasterFile.Parser.Structures.Records
         public float Fade;
         public uint HoldingSoundFormID;
         
-        private LIGHBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public static LIGHBuilder CreateAndConfigure(Action<LIGHBuilder> configurator)
-        {
-            var builder = new LIGHBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public LIGH Build()
+        public Record Build()
         {
             return new LIGH(this);
         }

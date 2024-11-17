@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 
@@ -78,7 +78,7 @@ namespace Core.MasterFile.Parser.Structures.Records
 
         public readonly Primitive Primitive;
 
-        public readonly List<uint> LinkedRoomFormIds;
+        public readonly IReadOnlyList<uint> LinkedRoomFormIds;
         
         public REFR(REFRBuilder builder) : base(builder.BaseInfo)
         {
@@ -102,9 +102,8 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
     
     // ReSharper disable once InconsistentNaming
-    public class REFRBuilder
+    public class REFRBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
         public uint BaseObjectFormId;
         public Float32Vector3 Position;
@@ -122,16 +121,9 @@ namespace Core.MasterFile.Parser.Structures.Records
         public Primitive Primitive;
         public List<uint> LinkedRoomFormIds = new();
         
-        private REFRBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public static REFRBuilder CreateAndConfigure(Action<REFRBuilder> configurator)
-        {
-            var builder = new REFRBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public REFR Build()
+        public Record Build()
         {
             return new REFR(this);
         }

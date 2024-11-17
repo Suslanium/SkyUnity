@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 
@@ -39,12 +39,12 @@ namespace Core.MasterFile.Parser.Structures.Records
         /// </summary>
         public readonly int YGridPosition;
 
-        public readonly Lighting CellLightingInfo;
+        public readonly Lighting LightingInfo;
 
         /// <summary>
-        /// The lighting template for this cell.
+        /// The lighting template for this cell. (LGTM)
         /// </summary>
-        public readonly uint LightingTemplateReference;
+        public readonly uint LightingTemplateFormId;
 
         /// <summary>
         /// <para>Non-ocean water-height in cell, is used for rivers, ponds etc., ocean-water is globally defined elsewhere.</para>
@@ -55,34 +55,35 @@ namespace Core.MasterFile.Parser.Structures.Records
         public readonly float NonOceanWaterHeight;
 
         /// <summary>
-        /// The location for (of?) this cell.
+        /// The location for (of?) this cell. (LCTN)
         /// </summary>
-        public readonly uint LocationReference;
+        public readonly uint LocationFormId;
 
         /// <summary>
-        /// The water for (of?) this cell.
+        /// The water for (of?) this cell. (WATR)
         /// </summary>
-        public readonly uint WaterReference;
+        public readonly uint WaterFormId;
 
         /// <summary>
-        /// Water Environment Map (only interior cells)
+        /// Water Environment Map
+        /// (a texture to be used as water reflection in a worldspace without a sky enabled)
         /// </summary>
         public readonly string WaterEnvironmentMap;
 
         /// <summary>
-        /// The acoustic space for this cell.
+        /// The acoustic space for this cell. (ASPC)
         /// </summary>
-        public readonly uint AcousticSpaceReference;
+        public readonly uint AcousticSpaceFormId;
 
         /// <summary>
-        /// The music type for this cell.
+        /// The music type for this cell. (MUSC)
         /// </summary>
-        public readonly uint MusicTypeReference;
+        public readonly uint MusicTypeFormId;
 
         /// <summary>
-        /// The image space for this cell.
+        /// The image space for this cell. (IMGS)
         /// </summary>
-        public readonly uint ImageSpaceReference;
+        public readonly uint ImageSpaceFormId;
 
         public CELL(CELLBuilder builder) : base(builder.BaseInfo)
         {
@@ -91,47 +92,39 @@ namespace Core.MasterFile.Parser.Structures.Records
             CellFlag = builder.CellFlag;
             XGridPosition = builder.XGridPosition;
             YGridPosition = builder.YGridPosition;
-            CellLightingInfo = builder.CellLightingInfo;
-            LightingTemplateReference = builder.LightingTemplateReference;
+            LightingInfo = builder.LightingInfo;
+            LightingTemplateFormId = builder.LightingTemplateFormId;
             NonOceanWaterHeight = builder.NonOceanWaterHeight;
-            LocationReference = builder.LocationReference;
-            WaterReference = builder.WaterReference;
+            LocationFormId = builder.LocationFormId;
+            WaterFormId = builder.WaterFormId;
             WaterEnvironmentMap = builder.WaterEnvironmentMap;
-            AcousticSpaceReference = builder.AcousticSpaceReference;
-            MusicTypeReference = builder.MusicTypeReference;
-            ImageSpaceReference = builder.ImageSpaceReference;
+            AcousticSpaceFormId = builder.AcousticSpaceFormId;
+            MusicTypeFormId = builder.MusicTypeFormId;
+            ImageSpaceFormId = builder.ImageSpaceFormId;
         }
     }
 
     // ReSharper disable once InconsistentNaming
-    public class CELLBuilder
+    public class CELLBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
         public LocalizedString Name;
         public ushort CellFlag;
         public int XGridPosition;
         public int YGridPosition;
-        public Lighting CellLightingInfo;
-        public uint LightingTemplateReference;
+        public Lighting LightingInfo;
+        public uint LightingTemplateFormId;
         public float NonOceanWaterHeight;
-        public uint LocationReference;
-        public uint WaterReference;
+        public uint LocationFormId;
+        public uint WaterFormId;
         public string WaterEnvironmentMap;
-        public uint AcousticSpaceReference;
-        public uint MusicTypeReference;
-        public uint ImageSpaceReference;
-        
-        private CELLBuilder() {}
+        public uint AcousticSpaceFormId;
+        public uint MusicTypeFormId;
+        public uint ImageSpaceFormId;
 
-        public static CELLBuilder CreateAndConfigure(Action<CELLBuilder> configurator)
-        {
-            var builder = new CELLBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public CELL Build()
+        public Record BaseInfo { get; set; }
+
+        public Record Build()
         {
             return new CELL(this);
         }

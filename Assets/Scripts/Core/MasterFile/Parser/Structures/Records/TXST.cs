@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
 
 namespace Core.MasterFile.Parser.Structures.Records
 {
@@ -47,9 +47,8 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
     
     // ReSharper disable once InconsistentNaming
-    public class TXSTBuilder
+    public class TXSTBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
         public string DiffuseMapPath;
         public string NormalMapPath;
@@ -60,17 +59,10 @@ namespace Core.MasterFile.Parser.Structures.Records
         public string MultiLayerMapPath;
         public string SpecularMapPath;
         public ushort Flags;
+        
+        public Record BaseInfo { get; set; }
 
-        private TXSTBuilder() {}
-        
-        public static TXSTBuilder CreateAndConfigure(Action<TXSTBuilder> configurator)
-        {
-            var builder = new TXSTBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public TXST Build()
+        public Record Build()
         {
             return new TXST(this);
         }

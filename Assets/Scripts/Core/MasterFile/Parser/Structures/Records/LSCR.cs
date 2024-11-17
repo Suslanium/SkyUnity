@@ -1,4 +1,5 @@
-﻿using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
+using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 
 namespace Core.MasterFile.Parser.Structures.Records
 {
@@ -38,9 +39,8 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
     
     // ReSharper disable once InconsistentNaming
-    public class LSCRBuilder
+    public class LSCRBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
         public uint StaticObjectFormID;
         public float InitialScale;
@@ -49,16 +49,9 @@ namespace Core.MasterFile.Parser.Structures.Records
         public short MaxRotationOffset;
         public Float32Vector3 InitialTranslation;
         
-        private LSCRBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public static LSCRBuilder CreateAndConfigure(System.Action<LSCRBuilder> configurator)
-        {
-            var builder = new LSCRBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public LSCR Build()
+        public Record Build()
         {
             return new LSCR(this);
         }

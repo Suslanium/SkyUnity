@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Landscape;
 
@@ -18,9 +18,9 @@ namespace Core.MasterFile.Parser.Structures.Records
 
         public readonly ColorRGB[,] VertexColors;
 
-        public readonly List<BaseTextureLayer> BaseTextures;
+        public readonly IReadOnlyList<BaseTextureLayer> BaseTextures;
 
-        public readonly List<AdditionalTextureLayer> AdditionalTextures;
+        public readonly IReadOnlyList<AdditionalTextureLayer> AdditionalTextures;
         
         public LAND(LANDBuilder builder) : base(builder.BaseInfo)
         {
@@ -32,24 +32,16 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
 
     // ReSharper disable once InconsistentNaming
-    public class LANDBuilder
+    public class LANDBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public float[,] VertexHeightMap;
         public ColorRGB[,] VertexColors;
         public List<BaseTextureLayer> BaseTextures = new();
         public List<AdditionalTextureLayer> AdditionalTextures = new();
         
-        private LANDBuilder() {}
-
-        public static LANDBuilder CreateAndConfigure(Action<LANDBuilder> configurator)
-        {
-            var builder = new LANDBuilder();
-            configurator(builder);
-            return builder;
-        }
+        public Record BaseInfo { get; set; }
         
-        public LAND Build()
+        public Record Build()
         {
             return new LAND(this);
         }

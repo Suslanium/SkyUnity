@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
 
 namespace Core.MasterFile.Parser.Structures.Records
 {
@@ -23,22 +23,14 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
 
     // ReSharper disable once InconsistentNaming
-    public class LTEXBuilder
+    public class LTEXBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
         public uint TextureFormID;
         
-        private LTEXBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public static LTEXBuilder CreateAndConfigure(Action<LTEXBuilder> configurator)
-        {
-            var builder = new LTEXBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public LTEX Build()
+        public Record Build()
         {
             return new LTEX(this);
         }

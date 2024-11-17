@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.MasterFile.Parser.Structures.Records.Builder;
 
 namespace Core.MasterFile.Parser.Structures.Records
 {
@@ -25,7 +26,7 @@ namespace Core.MasterFile.Parser.Structures.Records
         /// <summary>
         /// A list of required master files for this 
         /// </summary>
-        public readonly List<string> MasterFiles;
+        public readonly IReadOnlyList<string> MasterFiles;
 
         /// <summary>
         /// <para>Overridden forms</para>
@@ -33,7 +34,7 @@ namespace Core.MasterFile.Parser.Structures.Records
         /// <para>An ONAM subrecord will list, exclusively, FormIDs of overridden cell children (ACHR, LAND, NAVM, PGRE, PHZD, REFR).</para>
         /// <para>Number of records is based solely on field size.</para>
         /// </summary>
-        public readonly List<uint> OverridenForms;
+        public readonly IReadOnlyList<uint> OverridenForms;
 
         /// <summary>
         /// Number of strings that can be tagified (used only for TagifyMasterfile command-line option of the CK).
@@ -59,9 +60,8 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
     
     // ReSharper disable once InconsistentNaming
-    public class TES4Builder
+    public class TES4Builder : IRecordBuilder
     {
-        public Record BaseInfo;
         public float Version;
         public uint EntryAmount;
         public string Author;
@@ -71,16 +71,9 @@ namespace Core.MasterFile.Parser.Structures.Records
         public uint NumberOfTagifiableStrings;
         public uint Incc;
         
-        private TES4Builder() {}
+        public Record BaseInfo { get; set; }
         
-        public static TES4Builder CreateAndConfigure(System.Action<TES4Builder> configurator)
-        {
-            var builder = new TES4Builder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public TES4 Build()
+        public Record Build()
         {
             return new TES4(this);
         }

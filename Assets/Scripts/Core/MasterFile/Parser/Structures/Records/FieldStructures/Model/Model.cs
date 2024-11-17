@@ -10,12 +10,23 @@ namespace Core.MasterFile.Parser.Structures.Records.FieldStructures.Model
     {
         public readonly string FilePath;
 
-        public readonly List<AlternateTexture> AlternateTextures;
+        public readonly IReadOnlyList<AlternateTexture> AlternateTextures;
 
-        public Model(string filePath, List<AlternateTexture> alternateTextures = null)
+        public Model(ModelBuilder builder)
         {
-            FilePath = filePath;
-            AlternateTextures = alternateTextures;
+            FilePath = builder.FilePath;
+            AlternateTextures = builder.AlternateTextures;
+        }
+    }
+
+    public class ModelBuilder
+    {
+        public string FilePath;
+        public List<AlternateTexture> AlternateTextures = new();
+        
+        public Model Build()
+        {
+            return new Model(this);
         }
     }
 }

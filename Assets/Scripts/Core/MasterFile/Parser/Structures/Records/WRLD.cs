@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 
 namespace Core.MasterFile.Parser.Structures.Records
@@ -97,9 +97,8 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
     
     // ReSharper disable once InconsistentNaming
-    public class WRLDBuilder
+    public class WRLDBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
         public LocalizedString InGameName;
         public short CenterCellGridX;
@@ -113,16 +112,9 @@ namespace Core.MasterFile.Parser.Structures.Records
         public float LandLevel;
         public float OceanWaterLevel;
         
-        private WRLDBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public static WRLDBuilder CreateAndConfigure(Action<WRLDBuilder> configurator)
-        {
-            var builder = new WRLDBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public WRLD Build()
+        public Record Build()
         {
             return new WRLD(this);
         }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Model;
 
 namespace Core.MasterFile.Parser.Structures.Records
@@ -21,29 +21,21 @@ namespace Core.MasterFile.Parser.Structures.Records
         public MSTT(MSTTBuilder builder) : base(builder.BaseInfo)
         {
             EditorID = builder.EditorID;
-            ModelInfo = builder.ModelInfo;
+            ModelInfo = builder.ModelInfo.Build();
             AmbientLoopingSoundFormID = builder.AmbientLoopingSoundFormID;
         }
     }
     
     // ReSharper disable once InconsistentNaming
-    public class MSTTBuilder
+    public class MSTTBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
-        public Model ModelInfo;
+        public ModelBuilder ModelInfo = new();
         public uint AmbientLoopingSoundFormID;
         
-        private MSTTBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public static MSTTBuilder CreateAndConfigure(Action<MSTTBuilder> configurator)
-        {
-            var builder = new MSTTBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public MSTT Build()
+        public Record Build()
         {
             return new MSTT(this);
         }

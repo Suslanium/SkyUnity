@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Model;
 
@@ -44,12 +44,12 @@ namespace Core.MasterFile.Parser.Structures.Records
 
         public readonly ObjectBounds Bounds;
 
-        public readonly List<uint> RandomTeleports;
+        public readonly IReadOnlyList<uint> RandomTeleports;
 
         public DOOR(DOORBuilder builder) : base(builder.BaseInfo)
         {
             EditorID = builder.EditorID;
-            ModelInfo = builder.ModelInfo;
+            ModelInfo = builder.ModelInfo.Build();
             OpenSound = builder.OpenSound;
             CloseSound = builder.CloseSound;
             LoopSound = builder.LoopSound;
@@ -60,11 +60,10 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
 
     // ReSharper disable once InconsistentNaming
-    public class DOORBuilder
+    public class DOORBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
-        public Model ModelInfo;
+        public ModelBuilder ModelInfo = new();
         public uint OpenSound;
         public uint CloseSound;
         public uint LoopSound;
@@ -72,16 +71,9 @@ namespace Core.MasterFile.Parser.Structures.Records
         public ObjectBounds Bounds;
         public List<uint> RandomTeleports = new();
         
-        private DOORBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public static DOORBuilder CreateAndConfigure(Action<DOORBuilder> configurator)
-        {
-            var builder = new DOORBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public DOOR Build()
+        public Record Build()
         {
             return new DOOR(this);
         }

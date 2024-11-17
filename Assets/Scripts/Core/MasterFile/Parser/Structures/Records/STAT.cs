@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Model;
 
 namespace Core.MasterFile.Parser.Structures.Records
@@ -26,31 +26,23 @@ namespace Core.MasterFile.Parser.Structures.Records
         public STAT(STATBuilder builder) : base(builder.BaseInfo)
         {
             EditorID = builder.EditorID;
-            ModelInfo = builder.ModelInfo;
+            ModelInfo = builder.ModelInfo.Build();
             DirMaterialMaxAngle = builder.DirMaterialMaxAngle;
             DirectionalMaterialFormID = builder.DirectionalMaterialFormID;
         }
     }
     
     // ReSharper disable once InconsistentNaming
-    public class STATBuilder
+    public class STATBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
-        public Model ModelInfo;
+        public ModelBuilder ModelInfo = new();
         public float DirMaterialMaxAngle;
         public uint DirectionalMaterialFormID;
         
-        private STATBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public static STATBuilder CreateAndConfigure(Action<STATBuilder> configurator)
-        {
-            var builder = new STATBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public STAT Build()
+        public Record Build()
         {
             return new STAT(this);
         }

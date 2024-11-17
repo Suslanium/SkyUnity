@@ -46,25 +46,44 @@ namespace Core.MasterFile.Parser.Structures.Records.FieldStructures
         /// <para>0x0400 - Light Fade Distances</para>
         /// </summary>
         public readonly uint InheritFlags;
-
-        public Lighting(ColorRGBA ambientColor, ColorRGBA directionalColor, int directionalRotationXY,
-            int directionalRotationZ, float directionalFade, ColorRGBA fogNearColor, ColorRGBA fogFarColor,
-            float fogNear, float fogFar, float fogMax, float lightFadeDistanceStart, float lightFadeDistanceEnd,
-            uint inheritFlags)
+        
+        public Lighting(LightingBuilder builder)
         {
-            AmbientColor = ambientColor;
-            DirectionalColor = directionalColor;
-            DirectionalRotationXY = directionalRotationXY;
-            DirectionalRotationZ = directionalRotationZ;
-            DirectionalFade = directionalFade;
-            FogNearColor = fogNearColor;
-            FogFarColor = fogFarColor;
-            FogNear = fogNear;
-            FogFar = fogFar;
-            FogMax = fogMax;
-            LightFadeDistanceStart = lightFadeDistanceStart;
-            LightFadeDistanceEnd = lightFadeDistanceEnd;
-            InheritFlags = inheritFlags;
+            AmbientColor = builder.AmbientColor;
+            DirectionalColor = builder.DirectionalColor;
+            DirectionalRotationXY = builder.DirectionalRotationXY;
+            DirectionalRotationZ = builder.DirectionalRotationZ;
+            DirectionalFade = builder.DirectionalFade;
+            FogNearColor = builder.FogNearColor;
+            FogFarColor = builder.FogFarColor;
+            FogNear = builder.FogNear;
+            FogFar = builder.FogFar;
+            FogMax = builder.FogMax;
+            LightFadeDistanceStart = builder.LightFadeDistanceStart;
+            LightFadeDistanceEnd = builder.LightFadeDistanceEnd;
+            InheritFlags = builder.InheritFlags;
+        }
+    }
+
+    public class LightingBuilder
+    {
+        public ColorRGBA AmbientColor;
+        public ColorRGBA DirectionalColor;
+        public int DirectionalRotationXY;
+        public int DirectionalRotationZ;
+        public float DirectionalFade;
+        public ColorRGBA FogNearColor;
+        public ColorRGBA FogFarColor;
+        public float FogNear;
+        public float FogFar;
+        public float FogMax;
+        public float LightFadeDistanceStart;
+        public float LightFadeDistanceEnd;
+        public uint InheritFlags;
+        
+        public Lighting Build()
+        {
+            return new Lighting(this);
         }
     }
 }

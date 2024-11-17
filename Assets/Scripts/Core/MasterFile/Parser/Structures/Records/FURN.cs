@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core.MasterFile.Parser.Structures.Records.Builder;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Model;
 
@@ -51,7 +51,7 @@ namespace Core.MasterFile.Parser.Structures.Records
         {
             EditorID = builder.EditorID;
             InGameName = builder.InGameName;
-            ModelInfo = builder.ModelInfo;
+            ModelInfo = builder.ModelInfo.Build();
             WorkbenchType = builder.WorkbenchType;
             WorkbenchSkill = builder.WorkbenchSkill;
             InteractionKeyword = builder.InteractionKeyword;
@@ -59,26 +59,18 @@ namespace Core.MasterFile.Parser.Structures.Records
     }
 
     // ReSharper disable once InconsistentNaming
-    public class FURNBuilder
+    public class FURNBuilder : IRecordBuilder
     {
-        public Record BaseInfo;
         public string EditorID;
         public LocalizedString InGameName;
-        public Model ModelInfo;
+        public ModelBuilder ModelInfo = new();
         public byte WorkbenchType;
         public byte WorkbenchSkill;
         public uint InteractionKeyword;
         
-        private FURNBuilder() {}
+        public Record BaseInfo { get; set; }
         
-        public FURNBuilder CreateAndConfigure(Action<FURNBuilder> configurator)
-        {
-            var builder = new FURNBuilder();
-            configurator(builder);
-            return builder;
-        }
-        
-        public FURN Build()
+        public Record Build()
         {
             return new FURN(this);
         }
