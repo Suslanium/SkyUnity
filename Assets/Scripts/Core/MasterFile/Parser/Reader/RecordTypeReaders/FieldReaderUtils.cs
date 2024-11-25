@@ -32,9 +32,9 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
             }
         }
 
-        public static Lighting ReadLightingField(this BinaryReader fileReader, FieldInfo fieldInfo)
+        public static Lighting ReadLightingField(this BinaryReader fileReader, int fieldSize)
         {
-            if (fieldInfo.Size is 92 or 64)
+            if (fieldSize is 92 or 64)
             {
                 var builder = new LightingBuilder
                 {
@@ -48,7 +48,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     DirectionalFade = fileReader.ReadFloat32()
                 };
 
-                if (fieldInfo.Size == 64)
+                if (fieldSize == 64)
                 {
                     fileReader.BaseStream.Seek(32, SeekOrigin.Current);
                     return builder.Build();
@@ -64,7 +64,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
             }
             else
             {
-                fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
+                fileReader.BaseStream.Seek(fieldSize, SeekOrigin.Current);
                 return null;
             }
         }

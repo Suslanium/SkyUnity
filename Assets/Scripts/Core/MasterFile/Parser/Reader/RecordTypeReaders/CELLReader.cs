@@ -49,7 +49,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.YGridPosition = fileReader.ReadInt32();
                     break;
                 case LightingField:
-                    builder.LightingInfo = fileReader.ReadLightingField(fieldInfo);
+                    builder.LightingInfo = fileReader.ReadLightingField(fieldInfo.Size);
                     break;
                 case LightingTemplateFormIdField:
                     builder.LightingTemplateFormId = fileReader.ReadFormId();

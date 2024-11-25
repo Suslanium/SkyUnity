@@ -21,7 +21,11 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
             return RecordType;
         }
 
-        protected override void ReadField(MasterFileProperties properties, BinaryReader fileReader, FieldInfo fieldInfo, DOORBuilder builder)
+        protected override void ReadField(
+            MasterFileProperties properties, 
+            BinaryReader fileReader, 
+            FieldInfo fieldInfo, 
+            DOORBuilder builder)
         {
             if (fileReader.TryReadModelField(builder.ModelInfo, fieldInfo)) return;
             

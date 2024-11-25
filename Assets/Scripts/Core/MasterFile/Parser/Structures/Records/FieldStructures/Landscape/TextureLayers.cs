@@ -4,6 +4,12 @@
     {
         public readonly uint LandTextureFormID;
 
+        /// <summary>
+        /// 0 - bottom left;
+        /// 1 - bottom right;
+        /// 2 - upper left;
+        /// 3 - upper right;
+        /// </summary>
         public readonly byte Quadrant;
 
         public readonly ushort LayerIndex;
@@ -24,6 +30,12 @@
     {
         public readonly uint LandTextureFormID;
 
+        /// <summary>
+        /// 0 - bottom left;
+        /// 1 - bottom right;
+        /// 2 - upper left;
+        /// 3 - upper right;
+        /// </summary>
         public readonly byte Quadrant;
 
         public BaseTextureLayer(uint landTextureFormID, byte quadrant)
