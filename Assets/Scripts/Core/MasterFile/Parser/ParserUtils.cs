@@ -53,12 +53,12 @@ namespace Core.MasterFile.Parser
         }
 
         // ReSharper disable once InconsistentNaming
-        public static ColorRGBA ReadColorRGBA(this BinaryReader reader)
+        public static ColorRGBA ReadByteColorRGBA(this BinaryReader reader)
         {
             return new ColorRGBA(reader.ReadByte(), reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
         }
         
-        public static ColorRGB ReadColorRGB(this BinaryReader reader)
+        public static ColorRGB ReadByteColorRGB(this BinaryReader reader)
         {
             return new ColorRGB(reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
         }

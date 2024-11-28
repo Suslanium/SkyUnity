@@ -42,7 +42,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                 case LightingDataField:
                     builder.Time = fileReader.ReadInt32();
                     builder.Radius = fileReader.ReadUInt32();
-                    builder.Color = fileReader.ReadColorRGBA();
+                    builder.Color = fileReader.ReadByteColorRGBA();
                     builder.Flags = fileReader.ReadUInt32();
                     builder.FalloffExponent = fileReader.ReadFloat32();
                     builder.Fov = fileReader.ReadFloat32();

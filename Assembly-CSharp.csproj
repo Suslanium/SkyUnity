@@ -51,6 +51,13 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LGTMReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LIGHReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LSCRReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LTEXReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\MSTTReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\REFRReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\STATReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TES4Reader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TREEReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\WRLDReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TES4.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\CELLReader.cs" />
     <Compile Include="Assets\Scripts\Core\Common\Configurator.cs" />

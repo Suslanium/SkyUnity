@@ -70,7 +70,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
 
                     for (var i = 0; i < LandSideLength * LandSideLength; i++)
                     {
-                        var color = fileReader.ReadColorRGB();
+                        var color = fileReader.ReadByteColorRGB();
 
                         var currentRow = i / LandSideLength;
                         var currentColumn = i % LandSideLength;

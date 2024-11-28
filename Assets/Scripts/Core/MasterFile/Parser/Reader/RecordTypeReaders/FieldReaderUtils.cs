@@ -38,9 +38,9 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
             {
                 var builder = new LightingBuilder
                 {
-                    AmbientColor = fileReader.ReadColorRGBA(),
-                    DirectionalColor = fileReader.ReadColorRGBA(),
-                    FogNearColor = fileReader.ReadColorRGBA(),
+                    AmbientColor = fileReader.ReadByteColorRGBA(),
+                    DirectionalColor = fileReader.ReadByteColorRGBA(),
+                    FogNearColor = fileReader.ReadByteColorRGBA(),
                     FogNear = fileReader.ReadFloat32(),
                     FogFar = fileReader.ReadFloat32(),
                     DirectionalRotationXY = fileReader.ReadInt32(),
@@ -55,7 +55,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                 }
 
                 fileReader.BaseStream.Seek(40, SeekOrigin.Current);
-                builder.FogFarColor = fileReader.ReadColorRGBA();
+                builder.FogFarColor = fileReader.ReadByteColorRGBA();
                 builder.FogMax = fileReader.ReadFloat32();
                 builder.LightFadeDistanceStart = fileReader.ReadFloat32();
                 builder.LightFadeDistanceEnd = fileReader.ReadFloat32();
