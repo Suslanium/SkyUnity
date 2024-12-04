@@ -1,9 +1,9 @@
 using System.IO;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 
-namespace Core.MasterFile.Parser
+namespace Core.MasterFile.Parser.Reader
 {
-    public static class ParserUtils
+    public static class ReaderUtils
     {
         private const char ZeroTerminator = '\0';
 

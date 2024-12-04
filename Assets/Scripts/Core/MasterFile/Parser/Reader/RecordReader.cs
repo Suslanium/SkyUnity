@@ -3,7 +3,7 @@ using System.IO;
 using Core.Common;
 using Core.MasterFile.Parser.Structures;
 using Ionic.Zlib;
-using static Core.MasterFile.Parser.ParserUtils;
+using static Core.MasterFile.Parser.Reader.ReaderUtils;
 
 namespace Core.MasterFile.Parser.Reader
 {

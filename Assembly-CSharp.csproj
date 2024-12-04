@@ -47,6 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Core\Common\Constants.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\CovariantReadOnlyDictionary.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\MasterFile.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\ReaderUtils.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LANDReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LGTMReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LIGHReader.cs" />
@@ -112,7 +115,6 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\Float32Vector3.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LGTM.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\Zlib.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\ParserUtils.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\Inflate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LIGH.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TXSTReader.cs" />
