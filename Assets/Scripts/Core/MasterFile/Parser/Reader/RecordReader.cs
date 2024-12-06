@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Core.Common;
 using Core.MasterFile.Parser.Structures;
 using Ionic.Zlib;
@@ -13,10 +14,10 @@ namespace Core.MasterFile.Parser.Reader
         private readonly ILogger _logger;
         private readonly IReadOnlyDictionary<string, IRecordTypeReader> _recordTypeReaders;
 
-        public RecordReader(ILogger logger, IReadOnlyDictionary<string, IRecordTypeReader> recordTypeReaders)
+        public RecordReader(ILogger logger, IReadOnlyCollection<IRecordTypeReader> recordTypeReaders)
         {
             _logger = logger;
-            _recordTypeReaders = recordTypeReaders;
+            _recordTypeReaders = recordTypeReaders.ToDictionary(reader => reader.GetRecordType());
         }
 
         /// <summary>
@@ -51,14 +52,14 @@ namespace Core.MasterFile.Parser.Reader
 
             if (IsFlagSet(recordInfo.Flag, DataIsCompressed))
             {
-                var decompressedData = DecompressRecordData(fileReader, recordInfo.DataSize, recordInfo.FormID);
+                var decompressedData = DecompressRecordData(fileReader, recordInfo.DataSize, recordInfo.FormId);
                 var decompressedDataStream = new MemoryStream(decompressedData, false);
                 var decompressedDataReader = new BinaryReader(decompressedDataStream);
                 var decompressedRecordInfo = new Record(
                     type: recordInfo.Type,
                     dataSize: (uint)decompressedData.Length,
                     flag: recordInfo.Flag,
-                    formID: recordInfo.FormID,
+                    formID: recordInfo.FormId,
                     timestamp: recordInfo.Timestamp,
                     versionControlInfo: recordInfo.VersionControlInfo,
                     internalRecordVersion: recordInfo.InternalRecordVersion,

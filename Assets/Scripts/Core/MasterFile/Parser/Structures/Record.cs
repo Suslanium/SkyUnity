@@ -65,7 +65,7 @@
         /// <summary>
         /// Record (form) identifier
         /// </summary>
-        public readonly uint FormID;
+        public readonly uint FormId;
 
         /// <summary>
         /// <para>Timestamp</para>
@@ -101,7 +101,7 @@
             Type = type;
             DataSize = dataSize;
             Flag = flag;
-            FormID = formID;
+            FormId = formID;
             Timestamp = timestamp;
             VersionControlInfo = versionControlInfo;
             InternalRecordVersion = internalRecordVersion;
@@ -113,7 +113,7 @@
             Type = baseInfo.Type;
             DataSize = baseInfo.DataSize;
             Flag = baseInfo.Flag;
-            FormID = baseInfo.FormID;
+            FormId = baseInfo.FormId;
             Timestamp = baseInfo.Timestamp;
             VersionControlInfo = baseInfo.VersionControlInfo;
             InternalRecordVersion = baseInfo.InternalRecordVersion;

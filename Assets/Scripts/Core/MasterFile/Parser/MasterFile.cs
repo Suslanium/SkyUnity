@@ -1,24 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
+using Core.MasterFile.Parser.Extensions;
 using Core.MasterFile.Parser.Reader;
 using Core.MasterFile.Parser.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser
 {
-    public class MasterFile
+    public class MasterFile : IDisposable
     {
         private readonly Dictionary<uint, long> _formIdToPosition = new();
         private readonly Dictionary<uint, Group> _formIdToParentGroup = new();
         private readonly Dictionary<string, long> _recordTypeToGroupPosition = new();
         private readonly Dictionary<string, Dictionary<uint, long>> _recordTypeToFormIdToPosition = new();
 
-        private readonly MasterFileReader _parser;
+        private readonly MasterFileReader _reader;
         private readonly BinaryReader _fileReader;
         private readonly Task _initializationTask;
+
+        private readonly IReadOnlyDictionary<Type, IMasterFileExtension> _extensions;
 
         public readonly TES4 FileHeader;
         public readonly MasterFileProperties Properties;
@@ -29,13 +33,17 @@ namespace Core.MasterFile.Parser
         public IReadOnlyDictionary<string, long> RecordTypeToGroupPosition => _recordTypeToGroupPosition;
         public readonly IReadOnlyDictionary<string, IReadOnlyDictionary<uint, long>> RecordTypeToFormIdToPosition;
 
-        public MasterFile(BinaryReader fileReader, MasterFileReader parser)
+        public MasterFile(BinaryReader fileReader, MasterFileReader reader,
+            IReadOnlyCollection<IMasterFileExtension> extensions)
         {
             _fileReader = fileReader;
-            _parser = parser;
-            RecordTypeToFormIdToPosition = 
-                new CovariantReadOnlyDictionary<string, Dictionary<uint, long>, IReadOnlyDictionary<uint, long>>(_recordTypeToFormIdToPosition);
-            FileHeader = _parser.ReadEntry(MasterFileProperties.DummyInstance, _fileReader, 0) as TES4;
+            _reader = reader;
+            RecordTypeToFormIdToPosition =
+                new CovariantReadOnlyDictionary<string, Dictionary<uint, long>, IReadOnlyDictionary<uint, long>>(
+                    _recordTypeToFormIdToPosition);
+            _extensions = extensions.ToDictionary(extension => extension.GetType());
+            
+            FileHeader = _reader.ReadEntry(MasterFileProperties.DummyInstance, _fileReader, 0) as TES4;
             Properties = MasterFileProperties.FromTES4(FileHeader);
             _initializationTask = Task.Run(Initialize);
         }
@@ -64,24 +72,28 @@ namespace Core.MasterFile.Parser
                 }
 
                 var entryStartPosition = _fileReader.BaseStream.Position;
-                var entry = _parser.ReadEntryHeader(_fileReader, _fileReader.BaseStream.Position);
+                var entry = _reader.ReadEntryHeader(_fileReader, _fileReader.BaseStream.Position);
                 switch (entry)
                 {
                     case Record record:
-                        _formIdToPosition.Add(record.FormID, entryStartPosition);
-                        _formIdToParentGroup.Add(record.FormID, currentGroup);
+                        _formIdToPosition.Add(record.FormId, entryStartPosition);
+                        _formIdToParentGroup.Add(record.FormId, currentGroup);
 
                         if (!_recordTypeToFormIdToPosition.TryGetValue(record.Type, out var value))
                         {
                             _recordTypeToFormIdToPosition.Add(
                                 record.Type,
-                                new Dictionary<uint, long> { { record.FormID, entryStartPosition } });
+                                new Dictionary<uint, long> { { record.FormId, entryStartPosition } });
                         }
                         else
                         {
-                            value.Add(record.FormID, entryStartPosition);
+                            value.Add(record.FormId, entryStartPosition);
                         }
-                        //TODO additional logic for modules (ex. cell/wrld records handling)
+
+                        foreach (var extension in _extensions.Values)
+                        {
+                            extension.Initializer.OnRecordHeaderParsed(entryStartPosition, record, currentGroup);
+                        }
 
                         break;
                     case Group group:
@@ -91,64 +103,80 @@ namespace Core.MasterFile.Parser
                             var groupRecordsType = System.Text.Encoding.UTF8.GetString(group.Label);
                             _recordTypeToGroupPosition.Add(groupRecordsType, entryStartPosition);
                         }
-                        //TODO additional logic for modules (ex. cell group handling)
+                        
+                        foreach (var extension in _extensions.Values)
+                        {
+                            extension.Initializer.OnGroupHeaderParsed(entryStartPosition, group, currentGroup);
+                        }
 
                         groupStack.Push((group, entryStartPosition + group.Size - 24));
                         break;
                 }
             }
+            
+            foreach (var extension in _extensions.Values)
+            {
+                extension.FinishInitialization(_fileReader, _reader, this);
+            }
         }
-        
+
         public async Task AwaitInitialization()
         {
             await _initializationTask;
         }
         
+        public TExtension GetExtension<TExtension>() where TExtension : IMasterFileExtension
+        {
+            if (!_extensions.TryGetValue(typeof(TExtension), out var extension))
+                throw new ArgumentException($"MasterFile extension of type {typeof(TExtension)} not found.");
+            return (TExtension) extension;
+        }
+
         public void EnsureInitialized()
         {
             if (!IsInitialized)
-                throw new System.InvalidOperationException("Master file is not initialized yet.");
+                throw new InvalidOperationException("Master file is not initialized yet.");
         }
-        
+
         public Record GetFromFormID(uint formID)
         {
             EnsureInitialized();
             if (!_formIdToPosition.TryGetValue(formID, out var position))
                 return null;
-            
+
             lock (_fileReader)
             {
-                return _parser.ReadEntry(Properties, _fileReader, position) as Record;
+                return _reader.ReadEntry(Properties, _fileReader, position) as Record;
             }
         }
 
         public MasterFileEntry ReadAfterRecord(Record record)
         {
             EnsureInitialized();
-            if (!_formIdToPosition.TryGetValue(record.FormID, out var position))
+            if (!_formIdToPosition.TryGetValue(record.FormId, out var position))
                 return null;
 
             lock (_fileReader)
             {
                 //Skip the found record before reading the following entry
-                _parser.ReadEntryHeader(_fileReader, position);
-                
-                return _parser.ReadEntry(Properties, _fileReader, _fileReader.BaseStream.Position);
+                _reader.ReadEntryHeader(_fileReader, position);
+
+                return _reader.ReadEntry(Properties, _fileReader, _fileReader.BaseStream.Position);
             }
         }
-        
+
         public bool RecordExists(uint formID)
         {
             EnsureInitialized();
             return _formIdToPosition.ContainsKey(formID);
         }
-        
+
         public bool ContainsRecordsOfType(string recordType)
         {
             EnsureInitialized();
             return _recordTypeToFormIdToPosition.ContainsKey(recordType);
         }
-        
+
         /// <summary>
         /// For the record stored in the World Children/Cell (Persistent/Temporary) Children/Topic Children Group,
         /// find the FormID of their parent WRLD/CELL/DIAL
@@ -162,10 +190,16 @@ namespace Core.MasterFile.Parser
             EnsureInitialized();
             if (!_formIdToParentGroup.TryGetValue(formID, out var group))
                 return 0;
-            
+
             return group.GroupType is not 1 and not 6 and not 7 and not 8 and not 9
                 ? 0
                 : BitConverter.ToUInt32(group.Label);
+        }
+
+        public void Dispose()
+        {
+            _initializationTask?.Dispose();
+            _fileReader?.Dispose();
         }
     }
 }
