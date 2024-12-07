@@ -66,7 +66,7 @@ namespace Core.MasterFile.Parser.Reader
                     unknownData: recordInfo.UnknownData
                 );
 
-                result = recordReader.Read(properties, decompressedRecordInfo, decompressedDataReader,
+                result = recordReader.ReadFields(properties, decompressedRecordInfo, decompressedDataReader,
                     decompressedDataReader.BaseStream.Position);
 
                 decompressedDataReader.Close();
@@ -74,7 +74,7 @@ namespace Core.MasterFile.Parser.Reader
             }
             else
             {
-                result = recordReader.Read(properties, recordInfo, fileReader, fileReader.BaseStream.Position);
+                result = recordReader.ReadFields(properties, recordInfo, fileReader, fileReader.BaseStream.Position);
             }
 
             //Explicitly set the position to the start of the next entry to recover from potential errors

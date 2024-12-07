@@ -108,8 +108,8 @@ namespace Core.MasterFile.Parser.Extensions
             MasterFile.EnsureInitialized();
 
             var cellRecordDictionary = MasterFile.RecordTypeToFormIdToPosition[CellRecordType];
-            return cellRecordDictionary.Keys.Select(formId => (CELL)MasterFile.GetFromFormID(formId))
-                .FirstOrDefault(record => record.EditorID == editorId);
+            return cellRecordDictionary.Keys.Select(formId => MasterFile.GetFromFormId<CELL>(formId))
+                .FirstOrDefault(record => record?.EditorID == editorId);
         }
 
         public uint GetWorldSpaceFormId(uint cellFormId)
@@ -137,8 +137,8 @@ namespace Core.MasterFile.Parser.Extensions
             var cellDictionary = new Dictionary<CellPosition, CELL>();
             foreach (var cellFormId in cellFormIds)
             {
-                var cellRecord = MasterFile.GetFromFormID(cellFormId);
-                if (cellRecord is not CELL cell) continue;
+                var cell = MasterFile.GetFromFormId<CELL>(cellFormId);
+                if (cell == null) continue;
                 cellDictionary.Add(new CellPosition(cell.XGridPosition, cell.YGridPosition), cell);
             }
 

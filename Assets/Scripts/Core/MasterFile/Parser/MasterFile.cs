@@ -26,6 +26,7 @@ namespace Core.MasterFile.Parser
 
         public readonly TES4 FileHeader;
         public readonly MasterFileProperties Properties;
+        public readonly string FileName;
         public bool IsInitialized => _initializationTask.IsCompleted;
 
         public IReadOnlyDictionary<uint, long> FormIdToPosition => _formIdToPosition;
@@ -33,9 +34,10 @@ namespace Core.MasterFile.Parser
         public IReadOnlyDictionary<string, long> RecordTypeToGroupPosition => _recordTypeToGroupPosition;
         public readonly IReadOnlyDictionary<string, IReadOnlyDictionary<uint, long>> RecordTypeToFormIdToPosition;
 
-        public MasterFile(BinaryReader fileReader, MasterFileReader reader,
+        public MasterFile(string fileName, BinaryReader fileReader, MasterFileReader reader,
             IReadOnlyCollection<IMasterFileExtension> extensions)
         {
+            FileName = fileName;
             _fileReader = fileReader;
             _reader = reader;
             RecordTypeToFormIdToPosition =
@@ -68,7 +70,9 @@ namespace Core.MasterFile.Parser
                     }
 
                     if (groupStack.Count > 0)
+                    {
                         currentGroup = groupStack.Peek().Item1;
+                    }
                 }
 
                 var entryStartPosition = _fileReader.BaseStream.Position;
@@ -128,25 +132,32 @@ namespace Core.MasterFile.Parser
         public TExtension GetExtension<TExtension>() where TExtension : IMasterFileExtension
         {
             if (!_extensions.TryGetValue(typeof(TExtension), out var extension))
+            {
                 throw new ArgumentException($"MasterFile extension of type {typeof(TExtension)} not found.");
+            }
+
             return (TExtension) extension;
         }
 
         public void EnsureInitialized()
         {
             if (!IsInitialized)
+            {
                 throw new InvalidOperationException("Master file is not initialized yet.");
+            }
         }
 
-        public Record GetFromFormID(uint formID)
+        public T GetFromFormId<T>(uint formID) where T : Record
         {
             EnsureInitialized();
             if (!_formIdToPosition.TryGetValue(formID, out var position))
+            {
                 return null;
+            }
 
             lock (_fileReader)
             {
-                return _reader.ReadEntry(Properties, _fileReader, position) as Record;
+                return _reader.ReadEntry(Properties, _fileReader, position) as T;
             }
         }
 
@@ -154,7 +165,9 @@ namespace Core.MasterFile.Parser
         {
             EnsureInitialized();
             if (!_formIdToPosition.TryGetValue(record.FormId, out var position))
+            {
                 return null;
+            }
 
             lock (_fileReader)
             {
@@ -182,15 +195,18 @@ namespace Core.MasterFile.Parser
         /// find the FormID of their parent WRLD/CELL/DIAL
         /// </summary>
         /// <returns>
-        /// The formID of the parent record, or 0 if the record doesnot exist
+        /// The formID of the parent record, or 0 if the record does not exist
         /// or is not stored in one of the groups specified above
         /// </returns>
-        public uint GetRecordParentFormID(uint formID)
+        public uint GetRecordParentFormId(uint formID)
         {
             EnsureInitialized();
             if (!_formIdToParentGroup.TryGetValue(formID, out var group))
+            {
                 return 0;
+            }
 
+            //World Children/Cell (Persistent/Temporary) Children/Topic Children group types
             return group.GroupType is not 1 and not 6 and not 7 and not 8 and not 9
                 ? 0
                 : BitConverter.ToUInt32(group.Label);

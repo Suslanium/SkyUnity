@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Core.Common.DI;
+using Core.MasterFile.Manager.Extensions;
+using Core.MasterFile.Parser.Structures;
+
+namespace Core.MasterFile.Manager
+{
+    public class MasterFileManager : IDisposable
+    {
+        private readonly Dictionary<string, Parser.MasterFile> _masterFiles = new();
+        private readonly List<string> _reverseLoadOrder = new();
+        private readonly Dictionary<Type, MasterFileManagerExtension> _extensions = new();
+        private bool _masterFilesAreInitialized;
+
+        public IReadOnlyDictionary<string, Parser.MasterFile> MasterFiles => _masterFiles;
+        public IReadOnlyList<string> ReverseLoadOrder => _reverseLoadOrder;
+
+        public MasterFileManager(
+            IReadOnlyCollection<IProvider<Parser.MasterFile>> masterFileProviders,
+            IReadOnlyCollection<IProvider<MasterFileManagerExtension>> masterFileManagerExtensions)
+        {
+            foreach (var provider in masterFileProviders)
+            {
+                var masterFile = provider.Provide();
+
+                var missingMasters = masterFile.FileHeader.MasterFiles
+                    .Where(masterName => !_masterFiles.ContainsKey(masterName)).ToList();
+                if (missingMasters.Count > 0)
+                {
+                    throw new FileNotFoundException(
+                        $"Incorrect load order: masterfile(s) {string.Join(',', missingMasters)} " +
+                        $"required for {masterFile.FileName} not found.");
+                }
+
+                _masterFiles.Add(masterFile.FileName, masterFile);
+                _reverseLoadOrder.Insert(0, masterFile.FileName);
+            }
+            
+            foreach (var extensionProvider in masterFileManagerExtensions)
+            {
+                var extension = extensionProvider.Provide(configurator =>
+                {
+                    configurator.SetArgument(this);
+                });
+                _extensions.Add(extension.GetType(), extension);
+            }
+        }
+        
+        public TExtension GetExtension<TExtension>() where TExtension : MasterFileManagerExtension
+        {
+            if (!_extensions.TryGetValue(typeof(TExtension), out var extension))
+            {
+                throw new KeyNotFoundException($"MasterFile manager extension of type {typeof(TExtension)} not found.");
+            }
+            
+            return (TExtension) extension;
+        }
+
+        public async Task MasterFilesInitialization()
+        {
+            if (_masterFilesAreInitialized)
+                return;
+
+            await Task.WhenAll(MasterFiles.Values.Select(masterFile => masterFile.AwaitInitialization()));
+            _masterFilesAreInitialized = true;
+        }
+
+        public T GetFromFormId<T>(uint formId) where T : Record
+        {
+            MasterFilesInitialization().Wait();
+
+            var masterFileName = 
+                ReverseLoadOrder.FirstOrDefault(fileName => MasterFiles[fileName].RecordExists(formId));
+            return masterFileName == null ? null : MasterFiles[masterFileName].GetFromFormId<T>(formId);
+        }
+        
+        public Task<T> GetFromFormIdAsync<T>(uint formId) where T : Record
+        {
+            return Task.Run(() => GetFromFormId<T>(formId));
+        }
+
+        /// <summary>
+        /// For the record stored in the World Children/Cell (Persistent/Temporary) Children/Topic Children Group,
+        /// find the FormID of their parent WRLD/CELL/DIAL
+        /// </summary>
+        /// <returns>
+        /// The formID of the parent record, or 0 if the record does not exist
+        /// or is not stored in one of the groups specified above
+        /// </returns>
+        public uint GetRecordParentFormId(uint recordFormId)
+        {
+            MasterFilesInitialization().Wait();
+
+            var masterFileName = 
+                ReverseLoadOrder.FirstOrDefault(fileName => MasterFiles[fileName].RecordExists(recordFormId));
+            return masterFileName == null ? 0 : MasterFiles[masterFileName].GetRecordParentFormId(recordFormId);
+        }
+
+        public void Dispose()
+        {
+            foreach (var masterFile in _masterFiles.Values)
+            {
+                masterFile.Dispose();
+            }
+        }
+    }
+}

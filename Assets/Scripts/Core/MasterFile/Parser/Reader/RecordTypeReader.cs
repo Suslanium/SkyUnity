@@ -18,7 +18,7 @@ namespace Core.MasterFile.Parser.Reader
 
     public interface IRecordTypeReader
     {
-        public Record Read(
+        public Record ReadFields(
             MasterFileProperties properties,
             Record baseRecord,
             BinaryReader fileReader,
@@ -39,7 +39,7 @@ namespace Core.MasterFile.Parser.Reader
         private const int FieldTypeLength = 4;
         private const string LongFieldSize = "XXXX";
 
-        public Record Read(
+        public Record ReadFields(
             MasterFileProperties properties,
             Record baseRecord,
             BinaryReader fileReader,
