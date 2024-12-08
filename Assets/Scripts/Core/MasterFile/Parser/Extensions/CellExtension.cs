@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Extensions.Initialization;
 using Core.MasterFile.Parser.Structures.Records;
 
@@ -146,20 +147,25 @@ namespace Core.MasterFile.Parser.Extensions
             return cellDictionary;
         }
 
-        public CELL GetExteriorCellByGridPosition(uint worldSpaceFormId, short blockX, short blockY, short subBlockX,
-            short subBlockY, int xGridPosition, int yGridPosition)
+        public CELL GetExteriorCellByPosition(FullCellPosition cellPosition)
         {
             MasterFile.EnsureInitialized();
             
             var exteriorCellSubBlockId =
-                new ExteriorCellSubBlockId(worldSpaceFormId, blockX, blockY, subBlockX, subBlockY);
+                new ExteriorCellSubBlockId(
+                    cellPosition.WorldSpaceFormId,
+                    cellPosition.BlockX,
+                    cellPosition.BlockY,
+                    cellPosition.SubBlockX,
+                    cellPosition.SubBlockY);
             var cellDictionary = LoadCellSubBlock(exteriorCellSubBlockId);
             if (cellDictionary == null)
             {
                 return null;
             }
 
-            cellDictionary.TryGetValue(new CellPosition(xGridPosition, yGridPosition), out var cell);
+            cellDictionary.TryGetValue(new CellPosition(cellPosition.GridPositionX, cellPosition.GridPositionY), 
+                out var cell);
             return cell;
         }
 

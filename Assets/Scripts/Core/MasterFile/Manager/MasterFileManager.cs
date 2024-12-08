@@ -18,6 +18,7 @@ namespace Core.MasterFile.Manager
 
         public IReadOnlyDictionary<string, Parser.MasterFile> MasterFiles => _masterFiles;
         public IReadOnlyList<string> ReverseLoadOrder => _reverseLoadOrder;
+        public readonly Task MasterFilesInitialization;
 
         public MasterFileManager(
             IReadOnlyCollection<IProvider<Parser.MasterFile>> masterFileProviders,
@@ -48,6 +49,17 @@ namespace Core.MasterFile.Manager
                 });
                 _extensions.Add(extension.GetType(), extension);
             }
+            
+            MasterFilesInitialization = Task.Run(async () =>
+            {
+                if (_masterFilesAreInitialized)
+                {
+                    return;
+                }
+                
+                await Task.WhenAll(MasterFiles.Values.Select(masterFile => masterFile.AwaitInitialization()));
+                _masterFilesAreInitialized = true;
+            });
         }
         
         public TExtension GetExtension<TExtension>() where TExtension : MasterFileManagerExtension
@@ -60,27 +72,13 @@ namespace Core.MasterFile.Manager
             return (TExtension) extension;
         }
 
-        public async Task MasterFilesInitialization()
-        {
-            if (_masterFilesAreInitialized)
-                return;
-
-            await Task.WhenAll(MasterFiles.Values.Select(masterFile => masterFile.AwaitInitialization()));
-            _masterFilesAreInitialized = true;
-        }
-
         public T GetFromFormId<T>(uint formId) where T : Record
         {
-            MasterFilesInitialization().Wait();
+            MasterFilesInitialization.Wait();
 
             var masterFileName = 
                 ReverseLoadOrder.FirstOrDefault(fileName => MasterFiles[fileName].RecordExists(formId));
             return masterFileName == null ? null : MasterFiles[masterFileName].GetFromFormId<T>(formId);
-        }
-        
-        public Task<T> GetFromFormIdAsync<T>(uint formId) where T : Record
-        {
-            return Task.Run(() => GetFromFormId<T>(formId));
         }
 
         /// <summary>
@@ -93,7 +91,7 @@ namespace Core.MasterFile.Manager
         /// </returns>
         public uint GetRecordParentFormId(uint recordFormId)
         {
-            MasterFilesInitialization().Wait();
+            MasterFilesInitialization.Wait();
 
             var masterFileName = 
                 ReverseLoadOrder.FirstOrDefault(fileName => MasterFiles[fileName].RecordExists(recordFormId));

@@ -1,4 +1,5 @@
-﻿using Core.MasterFile.Parser.Structures.Records;
+﻿using Core.MasterFile.Common.Structures;
+using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Extensions
 {
@@ -14,11 +15,9 @@ namespace Core.MasterFile.Parser.Extensions
             return masterFile.GetExtension<CellExtension>().GetWorldSpaceFormId(cellFormId);
         }
 
-        public static CELL GetExteriorCellByGridPosition(this MasterFile masterFile, uint worldSpaceFormId,
-            short blockX, short blockY, short subBlockX, short subBlockY, int xGridPosition, int yGridPosition)
+        public static CELL GetExteriorCellByPosition(this MasterFile masterFile, FullCellPosition cellPosition)
         {
-            return masterFile.GetExtension<CellExtension>().GetExteriorCellByGridPosition(worldSpaceFormId, blockX,
-                blockY, subBlockX, subBlockY, xGridPosition, yGridPosition);
+            return masterFile.GetExtension<CellExtension>().GetExteriorCellByPosition(cellPosition);
         }
 
         public static CELL GetPersistentWorldSpaceCell(this MasterFile masterFile, uint worldSpaceFormId)
