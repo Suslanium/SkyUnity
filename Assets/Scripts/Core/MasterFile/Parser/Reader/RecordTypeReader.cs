@@ -45,7 +45,10 @@ namespace Core.MasterFile.Parser.Reader
             BinaryReader fileReader,
             long recordDataStartPosition)
         {
-            var builder = new TBuilder();
+            var builder = new TBuilder
+            {
+                BaseInfo = baseRecord
+            };
             fileReader.BaseStream.Seek(recordDataStartPosition, SeekOrigin.Begin);
             while (fileReader.BaseStream.Position < recordDataStartPosition + baseRecord.DataSize)
             {

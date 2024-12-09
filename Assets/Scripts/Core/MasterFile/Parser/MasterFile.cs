@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
+using Core.Common.DI;
 using Core.MasterFile.Parser.Extensions;
 using Core.MasterFile.Parser.Reader;
 using Core.MasterFile.Parser.Structures;
@@ -35,7 +36,7 @@ namespace Core.MasterFile.Parser
         public readonly IReadOnlyDictionary<string, IReadOnlyDictionary<uint, long>> RecordTypeToFormIdToPosition;
 
         public MasterFile(string fileName, BinaryReader fileReader, MasterFileReader reader,
-            IReadOnlyCollection<IMasterFileExtension> extensions)
+            IFactory<IReadOnlyCollection<IMasterFileExtension>> extensionsFactory)
         {
             FileName = fileName;
             _fileReader = fileReader;
@@ -43,7 +44,7 @@ namespace Core.MasterFile.Parser
             RecordTypeToFormIdToPosition =
                 new CovariantReadOnlyDictionary<string, Dictionary<uint, long>, IReadOnlyDictionary<uint, long>>(
                     _recordTypeToFormIdToPosition);
-            _extensions = extensions.ToDictionary(extension => extension.GetType());
+            _extensions = extensionsFactory.Create().ToDictionary(extension => extension.GetType());
             
             FileHeader = _reader.ReadEntry(MasterFileProperties.DummyInstance, _fileReader, 0) as TES4;
             Properties = MasterFileProperties.FromTES4(FileHeader);
@@ -105,7 +106,7 @@ namespace Core.MasterFile.Parser
                         if (group.GroupType == 0)
                         {
                             var groupRecordsType = System.Text.Encoding.UTF8.GetString(group.Label);
-                            _recordTypeToGroupPosition.Add(groupRecordsType, entryStartPosition);
+                            _recordTypeToGroupPosition[groupRecordsType] = entryStartPosition;
                         }
                         
                         foreach (var extension in _extensions.Values)

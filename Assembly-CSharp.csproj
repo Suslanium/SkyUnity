@@ -46,47 +46,29 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.27f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Core\Common\Constants.cs" />
-    <Compile Include="Assets\Scripts\Core\Common\CovariantReadOnlyDictionary.cs" />
-    <Compile Include="Assets\Scripts\Core\Common\DI\Configurator.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Common\Structures\FullCellPosition.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\ExtensionHelper.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\MasterFileManagerCellExtension.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\MasterFileManagerExtension.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\MasterFileManagerLoadingScreenExtension.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\MasterFileManager.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\CellExtension.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\ExtensionHelper.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\IMasterFileExtension.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\Initialization\CellExtensionInitializer.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\Initialization\IMasterFileExtensionInitializer.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\MasterFile.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\ReaderUtils.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LANDReader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LGTMReader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LIGHReader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LSCRReader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LTEXReader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\MSTTReader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\REFRReader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\STATReader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TES4Reader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TREEReader.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\WRLDReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TES4.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\CELLReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\MasterFileManagerCellExtension.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\ExtensionHelper.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\REFRReader.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ZlibBaseStream.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\MasterFileManagerLoadingScreenExtension.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\MasterFileManager.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Record.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\DoorTeleport.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\Builder\IRecordBuilder.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Model\AlternateTextures.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\DOOR.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TES4Reader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LTEX.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\Int16Vector3.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\MasterFile.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\MasterFileReader.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ZlibCodec.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ZlibConstants.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TREEReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\STATReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\LocalizedString.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Primitive.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Lighting.cs" />
@@ -97,38 +79,58 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\FURNReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Model\Model.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\PortalInfo.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\ReaderUtils.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\DeflateStream.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\MasterFileProperties.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\MSTT.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\Tree.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FURN.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\STAT.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LANDReader.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\InfTree.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\ObjectBounds.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\ColorRGB.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TXST.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TREE.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\CovariantReadOnlyDictionary.cs" />
     <Compile Include="Assets\Scripts\Core\Common\ILogger.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LTEXReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\FieldReaderUtils.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\CellExtension.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\ColorRGBA.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\Deflate.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ZlibStream.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LSCR.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\CRC32.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\WRLDReader.cs" />
+    <Compile Include="Assets\Scripts\MasterFileTest.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\GZipStream.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Landscape\TextureLayers.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LGTMReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Group.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\Initialization\IMasterFileExtensionInitializer.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\MasterFileEntry.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\REFR.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Common\Structures\FullCellPosition.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\CELL.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ParallelDeflateOutputStream.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LIGHReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\Float32Vector3.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\Initialization\CellExtensionInitializer.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\MSTTReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LGTM.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\Zlib.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\IMasterFileExtension.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\DI\MasterFileModule.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\DI\DependencyInjectionCore.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\Inflate.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\Constants.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LIGH.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TXSTReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LSCRReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\MasterFileManagerExtension.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\ExtensionHelper.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.0.27f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -1008,6 +1010,8 @@
     <Reference Include="Unity.InputSystem">
       <HintPath>E:\Unity Projects\SkyUnity\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

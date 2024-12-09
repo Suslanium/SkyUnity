@@ -21,13 +21,11 @@ namespace Core.MasterFile.Manager
         public readonly Task MasterFilesInitialization;
 
         public MasterFileManager(
-            IReadOnlyCollection<IProvider<Parser.MasterFile>> masterFileProviders,
-            IReadOnlyCollection<IProvider<MasterFileManagerExtension>> masterFileManagerExtensions)
+            IReadOnlyCollection<Parser.MasterFile> masterFiles,
+            IFactory<IReadOnlyCollection<MasterFileManagerExtension>> masterFileManagerExtensionsFactory)
         {
-            foreach (var provider in masterFileProviders)
+            foreach (var masterFile in masterFiles)
             {
-                var masterFile = provider.Provide();
-
                 var missingMasters = masterFile.FileHeader.MasterFiles
                     .Where(masterName => !_masterFiles.ContainsKey(masterName)).ToList();
                 if (missingMasters.Count > 0)
@@ -41,12 +39,13 @@ namespace Core.MasterFile.Manager
                 _reverseLoadOrder.Insert(0, masterFile.FileName);
             }
             
-            foreach (var extensionProvider in masterFileManagerExtensions)
-            {
-                var extension = extensionProvider.Provide(configurator =>
+            var masterFileManagerExtensions = 
+                masterFileManagerExtensionsFactory.Create(configurator =>
                 {
                     configurator.SetArgument(this);
                 });
+            foreach (var extension in masterFileManagerExtensions)
+            {
                 _extensions.Add(extension.GetType(), extension);
             }
             
