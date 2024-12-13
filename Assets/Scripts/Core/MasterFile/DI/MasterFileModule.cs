@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Core.Common;
+using Core.Common.DI;
 using Core.MasterFile.Manager;
 using Core.MasterFile.Manager.Extensions;
 using Core.MasterFile.Parser.Extensions;
@@ -7,7 +9,7 @@ using Core.MasterFile.Parser.Extensions.Initialization;
 using Core.MasterFile.Parser.Reader;
 using Core.MasterFile.Parser.Reader.RecordTypeReaders;
 
-namespace Core.Common.DI
+namespace Core.MasterFile.DI
 {
     //TODO move to master file module (this shouldn't be in the core module)
     public static class MasterFileModule

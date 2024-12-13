@@ -20,18 +20,18 @@ namespace Core.MasterFile.Manager.Extensions
             return manager.GetExtension<MasterFileManagerCellExtension>().GetWorldSpaceFormId(cellFormId);
         }
 
-        public static CellData GetWorldSpacePersistentCellData(this MasterFileManager manager, uint worldSpaceFormId)
+        public static RawCellData GetWorldSpacePersistentCellData(this MasterFileManager manager, uint worldSpaceFormId)
         {
             return manager.GetExtension<MasterFileManagerCellExtension>()
                 .GetWorldSpacePersistentCellData(worldSpaceFormId);
         }
 
-        public static CellData GetCellData(this MasterFileManager manager, uint cellFormId)
+        public static RawCellData GetCellData(this MasterFileManager manager, uint cellFormId)
         {
             return manager.GetExtension<MasterFileManagerCellExtension>().GetCellData(cellFormId);
         }
 
-        public static CellData GetExteriorCellData(this MasterFileManager manager, FullCellPosition cellPosition)
+        public static RawCellData GetExteriorCellData(this MasterFileManager manager, FullCellPosition cellPosition)
         {
             return manager.GetExtension<MasterFileManagerCellExtension>().GetExteriorCellData(cellPosition);
         }

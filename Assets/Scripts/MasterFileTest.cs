@@ -1,4 +1,5 @@
 ﻿using Core.Common.DI;
+using Core.MasterFile.DI;
 using Core.MasterFile.Manager;
 using Core.MasterFile.Manager.Extensions;
 using UnityEngine;

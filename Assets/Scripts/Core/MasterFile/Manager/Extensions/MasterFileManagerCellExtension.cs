@@ -7,7 +7,7 @@ using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Manager.Extensions
 {
-    public class CellData
+    public class RawCellData
     {
         /// <summary>
         /// Persistent cell children, mostly containing REFR records.
@@ -30,7 +30,7 @@ namespace Core.MasterFile.Manager.Extensions
         /// </summary>
         public readonly CELL CellRecord;
 
-        public CellData(IReadOnlyList<Record> persistentChildren, IReadOnlyList<Record> temporaryChildren,
+        public RawCellData(IReadOnlyList<Record> persistentChildren, IReadOnlyList<Record> temporaryChildren,
             IReadOnlyDictionary<uint, Record> referenceBaseObjects, CELL cellRecord)
         {
             PersistentChildren = persistentChildren;
@@ -89,7 +89,7 @@ namespace Core.MasterFile.Manager.Extensions
                 : MasterFileManager.MasterFiles[masterFileName].GetWorldSpaceFormId(cellFormId);
         }
 
-        public CellData GetWorldSpacePersistentCellData(uint worldSpaceFormId)
+        public RawCellData GetWorldSpacePersistentCellData(uint worldSpaceFormId)
         {
             MasterFileManager.MasterFilesInitialization.Wait();
 
@@ -109,7 +109,7 @@ namespace Core.MasterFile.Manager.Extensions
             return GetCellData(new CellLoadRequest(masterFileToCellInLoadOrder, cellRecord));
         }
 
-        public CellData GetCellData(uint cellFormId)
+        public RawCellData GetCellData(uint cellFormId)
         {
             MasterFileManager.MasterFilesInitialization.Wait();
             
@@ -129,7 +129,7 @@ namespace Core.MasterFile.Manager.Extensions
             return GetCellData(new CellLoadRequest(masterFileToCellInLoadOrder, cellRecord));
         }
 
-        public CellData GetExteriorCellData(FullCellPosition cellPosition)
+        public RawCellData GetExteriorCellData(FullCellPosition cellPosition)
         {
             MasterFileManager.MasterFilesInitialization.Wait();
             
@@ -149,7 +149,7 @@ namespace Core.MasterFile.Manager.Extensions
             return GetCellData(new CellLoadRequest(masterFileToCellInLoadOrder, cellRecord));
         }
 
-        private static CellData GetCellData(CellLoadRequest request)
+        private static RawCellData GetCellData(CellLoadRequest request)
         {
             var persistentChildren = new Dictionary<uint, Record>();
             var temporaryChildren = new Dictionary<uint, Record>();
@@ -193,7 +193,7 @@ namespace Core.MasterFile.Manager.Extensions
                 }
             }
 
-            return new CellData(persistentChildren.Values.ToList(), temporaryChildren.Values.ToList(), baseObjects,
+            return new RawCellData(persistentChildren.Values.ToList(), temporaryChildren.Values.ToList(), baseObjects,
                 request.CellRecord);
         }
     }

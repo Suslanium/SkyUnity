@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Core.MasterFile.Parser
         private readonly Dictionary<uint, Group> _formIdToParentGroup = new();
         private readonly Dictionary<string, long> _recordTypeToGroupPosition = new();
         private readonly Dictionary<string, Dictionary<uint, long>> _recordTypeToFormIdToPosition = new();
+        private readonly ConcurrentDictionary<uint, Record> _recordCache = new();
 
         private readonly MasterFileReader _reader;
         private readonly BinaryReader _fileReader;
@@ -151,15 +153,23 @@ namespace Core.MasterFile.Parser
         public T GetFromFormId<T>(uint formID) where T : Record
         {
             EnsureInitialized();
+            if (_recordCache.TryGetValue(formID, out var cachedRecord))
+            {
+                return (T) cachedRecord;
+            }
+            
             if (!_formIdToPosition.TryGetValue(formID, out var position))
             {
                 return null;
             }
 
+            T record;
             lock (_fileReader)
             {
-                return _reader.ReadEntry(Properties, _fileReader, position) as T;
+                record = _reader.ReadEntry(Properties, _fileReader, position) as T;
             }
+            _recordCache[formID] = record;
+            return record;
         }
 
         public MasterFileEntry ReadAfterRecord(Record record)
