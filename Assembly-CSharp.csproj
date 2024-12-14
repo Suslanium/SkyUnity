@@ -46,8 +46,14 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.27f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\BoxCollider.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\DoorTeleport.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\IUnprocessedComponent.cs" />
     <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Light.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Localization\ILocalizableComponent.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Localization\LocalizedStringInfo.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\CellUtils.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\DoorDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\LightObjectDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\StaticObjectDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TES4.cs" />
@@ -1026,8 +1032,6 @@
     <Reference Include="Unity.InputSystem">
       <HintPath>E:\Unity Projects\SkyUnity\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

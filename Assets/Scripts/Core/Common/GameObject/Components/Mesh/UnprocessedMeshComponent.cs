@@ -1,6 +1,6 @@
 ﻿namespace Core.Common.GameObject.Components.Mesh
 {
-    public class UnprocessedMeshComponent : IComponent
+    public class UnprocessedMeshComponent : IUnprocessedComponent
     {
         public readonly MeshInfo MeshInfo;
         

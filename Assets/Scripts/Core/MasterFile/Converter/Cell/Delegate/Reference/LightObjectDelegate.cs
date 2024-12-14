@@ -37,8 +37,8 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
         {
             if (referencedRecord is not LIGH light) return;
             var gameObj = new GameObject(light.EditorID ?? light.FormId.ToString(), result.RootGameObject);
+            
             var modelInfo = light.ModelInfo;
-
             if (modelInfo != null)
             {
                 var meshInfo = modelInfo.ToMeshInfo(_masterFileManager);

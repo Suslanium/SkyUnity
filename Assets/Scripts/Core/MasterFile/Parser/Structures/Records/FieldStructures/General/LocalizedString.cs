@@ -1,4 +1,6 @@
-﻿namespace Core.MasterFile.Parser.Structures.Records.FieldStructures.General
+﻿using Core.Common.GameObject.Components.Localization;
+
+namespace Core.MasterFile.Parser.Structures.Records.FieldStructures.General
 {
     public class LocalizedString
     {
@@ -12,12 +14,21 @@
             Value = null;
             IsLoaded = false;
         }
-        
+
         public LocalizedString(string value)
         {
             Index = 0;
             Value = value;
             IsLoaded = true;
+        }
+
+        public LocalizedStringInfo ToLocalizedStringInfo(string fallback)
+        {
+            return new LocalizedStringInfo(
+                fallback,
+                Index,
+                Value,
+                IsLoaded);
         }
     }
 }
