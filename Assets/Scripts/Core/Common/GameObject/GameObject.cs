@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Core.Common.GameObject
@@ -27,11 +28,11 @@ namespace Core.Common.GameObject
         
         public readonly List<IComponent> Components = new();
         
-        public Vector3 Position = Vector3.zero;
+        public float3 Position = Vector3.zero;
         
-        public Quaternion Rotation = Quaternion.identity;
+        public quaternion Rotation = Quaternion.identity;
         
-        public Vector3 Scale = Vector3.one;
+        public float3 LocalScale = Vector3.one;
         
         public GameObject(string name, GameObject parent)
         {

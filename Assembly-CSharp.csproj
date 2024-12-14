@@ -46,6 +46,10 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.27f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Light.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\CellUtils.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\LightObjectDelegate.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\StaticObjectDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TES4.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\CELLReader.cs" />
     <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Mesh\MeshInfo.cs" />
@@ -65,12 +69,11 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TES4Reader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LTEX.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\Int16Vector3.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\Base\ICellReferenceInstantiationDelegate.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\Base\ICellReferenceDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\MasterFile.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\MasterFileReader.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ZlibCodec.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ZlibConstants.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Base\ICellRecordInstantiationDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TREEReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\STATReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\LocalizedString.cs" />
@@ -118,10 +121,9 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Landscape\TextureLayers.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LGTMReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Group.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\Base\ICellReferencePreprocessDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\Initialization\IMasterFileExtensionInitializer.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\MasterFileEntry.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Base\ICellRecordPreprocessDelegate.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Base\ICellRecordDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\REFR.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Common\Structures\FullCellPosition.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\CELL.cs" />

@@ -6,9 +6,9 @@ namespace Core.Common.GameObject.Components.Mesh
     {
         public readonly string FilePath;
         
-        public readonly IReadOnlyCollection<AlternateTextureInfo> AlternateTextures;
+        public readonly IReadOnlyList<AlternateTextureInfo> AlternateTextures;
         
-        public MeshInfo(string filePath, IReadOnlyCollection<AlternateTextureInfo> alternateTextures)
+        public MeshInfo(string filePath, IReadOnlyList<AlternateTextureInfo> alternateTextures)
         {
             FilePath = filePath;
             AlternateTextures = alternateTextures;

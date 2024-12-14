@@ -6,53 +6,30 @@ using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Converter.Cell.Delegate.Reference.Base
 {
-    public class CellReferenceDelegateManager : ICellRecordPreprocessDelegate<REFR>, ICellRecordInstantiationDelegate<REFR>
+    public class CellReferenceDelegateManager : ICellRecordDelegate<REFR>
     {
-        private readonly IReadOnlyList<ICellReferencePreprocessDelegate> _preprocessDelegates;
-        private readonly IReadOnlyList<ICellReferenceInstantiationDelegate> _instantiationDelegates;
+        private readonly IReadOnlyList<ICellReferenceDelegate> _delegates;
         
-        public CellReferenceDelegateManager(IReadOnlyList<ICellReferencePreprocessDelegate> preprocessDelegates,
-            IReadOnlyList<ICellReferenceInstantiationDelegate> instantiationDelegates)
+        public CellReferenceDelegateManager(IReadOnlyList<ICellReferenceDelegate> delegates)
         {
-            _preprocessDelegates = preprocessDelegates;
-            _instantiationDelegates = instantiationDelegates;
+            _delegates = delegates;
         }
         
-        public void PreprocessRecord(RawCellData rawCellData, REFR record, CellInfo result)
+        public void ProcessRecord(RawCellData rawCellData, REFR record, CellInfo result)
         {
             if (!rawCellData.ReferenceBaseObjects.TryGetValue(record.BaseObjectFormId, out var referencedRecord))
             {
                 return;
             }
             
-            foreach (var preprocessDelegate in _preprocessDelegates)
+            foreach (var preprocessDelegate in _delegates)
             {
-                if (!preprocessDelegate.IsPreprocessApplicable(rawCellData.CellRecord, record, referencedRecord))
+                if (!preprocessDelegate.IsApplicable(rawCellData.CellRecord, record, referencedRecord))
                 {
                     continue;
                 }
 
-                preprocessDelegate.PreprocessObject(rawCellData.CellRecord, record, referencedRecord, result);
-            }
-        }
-
-        public void InstantiateRecord(RawCellData rawCellData, REFR record, CellInfo result)
-        {
-            if (!rawCellData.ReferenceBaseObjects.TryGetValue(record.BaseObjectFormId, out var referencedRecord))
-            {
-                return;
-            }
-            if (referencedRecord == null)
-            {
-                return;
-            }
-
-            foreach (var instantiationDelegate in _instantiationDelegates)
-            {
-                if (!instantiationDelegate.IsInstantiationApplicable(rawCellData.CellRecord, record, referencedRecord))
-                    continue;
-
-                instantiationDelegate.InstantiateObject(rawCellData.CellRecord, record, referencedRecord, result);
+                preprocessDelegate.ProcessReference(rawCellData.CellRecord, record, referencedRecord, result);
             }
         }
     }

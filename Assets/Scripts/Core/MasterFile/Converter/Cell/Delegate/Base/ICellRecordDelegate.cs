@@ -4,8 +4,8 @@ using Core.MasterFile.Parser.Structures;
 
 namespace Core.MasterFile.Converter.Cell.Delegate.Base
 {
-    public interface ICellRecordInstantiationDelegate<T> where T : Record
+    public interface ICellRecordDelegate<T> where T : Record
     {
-        public void InstantiateRecord(RawCellData rawCellData, T record, CellInfo result);
+        public void ProcessRecord(RawCellData rawCellData, T record, CellInfo result);
     }
 }
