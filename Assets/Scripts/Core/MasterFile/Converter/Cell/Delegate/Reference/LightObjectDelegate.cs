@@ -4,7 +4,6 @@ using Core.Common.PreloadApis;
 using Core.Common.Structures;
 using Core.MasterFile.Converter.Cell.Delegate.Reference.Base;
 using Core.MasterFile.Manager;
-using Core.MasterFile.Parser.Reader;
 using Core.MasterFile.Parser.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 using UnityEngine;
@@ -49,7 +48,7 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
 
             var lightComponent = new Light();
             //TODO this light conversion algorithm is far from perfect
-            if (ReaderUtils.IsFlagSet(light.Flags, ShadowSpotLightFlagMask))
+            if (Utils.IsFlagSet(light.Flags, ShadowSpotLightFlagMask))
             {
                 var nestedSpotGameObject = new GameObject("SpotLight", gameObj)
                 {
@@ -66,12 +65,12 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
             //TODO alpha potentially should be 255
             lightComponent.Color = new Color32(light.Color.R, light.Color.G, light.Color.B, light.Color.A);
             lightComponent.Intensity = light.Fade + reference.FadeOffset;
-            if (ReaderUtils.IsFlagSet(light.Flags, ShadowSpotLightFlagMask))
+            if (Utils.IsFlagSet(light.Flags, ShadowSpotLightFlagMask))
             {
                 lightComponent.Type = LightType.Spot;
             }
-            else if (!ReaderUtils.IsFlagSet(light.Flags, ShadowHemisphereLightMask) &&
-                     !ReaderUtils.IsFlagSet(light.Flags, ShadowOmnidirectionalLightMask))
+            else if (!Utils.IsFlagSet(light.Flags, ShadowHemisphereLightMask) &&
+                     !Utils.IsFlagSet(light.Flags, ShadowOmnidirectionalLightMask))
             {
                 lightComponent.Shadows = LightShadows.None;
             }

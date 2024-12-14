@@ -1,4 +1,4 @@
-﻿using Core.MasterFile.Parser.Reader;
+﻿using Core.Common;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Structures
@@ -27,9 +27,9 @@ namespace Core.MasterFile.Parser.Structures
         public static MasterFileProperties FromTES4(TES4 tes4)
         {
             return new MasterFileProperties(
-                ReaderUtils.IsFlagSet(tes4.Flag, 0x00000001),
-                ReaderUtils.IsFlagSet(tes4.Flag, 0x00000080),
-                ReaderUtils.IsFlagSet(tes4.Flag, 0x00000200));
+                Utils.IsFlagSet(tes4.Flag, 0x00000001),
+                Utils.IsFlagSet(tes4.Flag, 0x00000080),
+                Utils.IsFlagSet(tes4.Flag, 0x00000200));
         }
     }
 }

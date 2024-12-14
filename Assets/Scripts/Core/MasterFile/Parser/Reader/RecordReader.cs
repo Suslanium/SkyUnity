@@ -4,7 +4,6 @@ using System.Linq;
 using Core.Common;
 using Core.MasterFile.Parser.Structures;
 using Ionic.Zlib;
-using static Core.MasterFile.Parser.Reader.ReaderUtils;
 
 namespace Core.MasterFile.Parser.Reader
 {
@@ -50,7 +49,7 @@ namespace Core.MasterFile.Parser.Reader
                 return recordInfo;
             }
 
-            if (IsFlagSet(recordInfo.Flag, DataIsCompressed))
+            if (Utils.IsFlagSet(recordInfo.Flag, DataIsCompressed))
             {
                 var decompressedData = DecompressRecordData(fileReader, recordInfo.DataSize, recordInfo.FormId);
                 var decompressedDataStream = new MemoryStream(decompressedData, false);

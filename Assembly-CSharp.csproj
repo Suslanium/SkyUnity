@@ -52,6 +52,7 @@
     <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Light.cs" />
     <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Localization\ILocalizableComponent.cs" />
     <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Localization\LocalizedStringInfo.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\Utils.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\CellUtils.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\DoorDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\LightObjectDelegate.cs" />

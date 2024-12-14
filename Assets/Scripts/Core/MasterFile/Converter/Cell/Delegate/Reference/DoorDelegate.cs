@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Common;
 using Core.Common.Converter;
 using Core.Common.GameObject.Components;
 using Core.Common.GameObject.Components.Mesh;
@@ -6,7 +7,6 @@ using Core.Common.PreloadApis;
 using Core.Common.Structures;
 using Core.MasterFile.Converter.Cell.Delegate.Reference.Base;
 using Core.MasterFile.Manager;
-using Core.MasterFile.Parser.Reader;
 using Core.MasterFile.Parser.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 using Unity.Mathematics;
@@ -74,7 +74,7 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
 
             var destinationName = destinationCell.Name.ToLocalizedStringInfo(destinationCell.EditorID);
             //If the door leads to an exterior cell, load the worldspace record to get the worldspace name
-            if (!ReaderUtils.IsFlagSet(destinationCell.CellFlag, IsInteriorFlagMask))
+            if (!Utils.IsFlagSet(destinationCell.CellFlag, IsInteriorFlagMask))
             {
                 var worldSpaceFormId = _masterFileManager.GetRecordParentFormId(destinationCell.FormId);
                 var worldSpace = _masterFileManager.GetFromFormId<WRLD>(worldSpaceFormId);
@@ -89,7 +89,7 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
                 out var teleportPosition);
             TransformConverter.SkyrimRadiansToUnityQuaternion(reference.DoorTeleport.DestinationRotation.XYZ,
                 out var teleportRotation);
-            var isAutomaticDoor = ReaderUtils.IsFlagSet(door.Flags, IsAutomaticFlagMask);
+            var isAutomaticDoor = Utils.IsFlagSet(door.Flags, IsAutomaticFlagMask);
 
             //Create the door component, create the game object
             var doorComponent = new DoorTeleportNonLocalized(isAutomaticDoor, teleportPosition, teleportRotation, destinationCellFormId,

@@ -100,17 +100,5 @@ namespace Core.MasterFile.Parser.Reader
                 ? new LocalizedString(reader.ReadUInt32())
                 : new LocalizedString(reader.ReadZString(length));
         }
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsFlagSet(uint flag, uint mask)
-        {
-            return (flag & mask) != 0;
-        }
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsFlagSet(ushort flag, ushort mask)
-        {
-            return (flag & mask) != 0;
-        }
     }
 }
