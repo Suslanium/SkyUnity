@@ -7,17 +7,44 @@ namespace Core.Common.Structures
     {
         public readonly GameObject.GameObject RootGameObject;
         
+        public readonly IReadOnlyList<GameObject.GameObject> UnprocessedGameObjects;
+        
+        public readonly CellOcclusionInfo OcclusionInfo;
+        
+        public readonly float3? DefaultSpawnPosition;
+        
+        public readonly quaternion? DefaultSpawnRotation;
+        
+        public CellInfo(CellInfoBuilder builder)
+        {
+            RootGameObject = builder.RootGameObject;
+            UnprocessedGameObjects = builder.UnprocessedGameObjects;
+            OcclusionInfo = builder.OcclusionInfoBuilder.Build();
+            DefaultSpawnPosition = builder.DefaultSpawnPosition;
+            DefaultSpawnRotation = builder.DefaultSpawnRotation;
+        }
+    }
+
+    public class CellInfoBuilder
+    {
+        public readonly GameObject.GameObject RootGameObject;
+        
         public readonly List<GameObject.GameObject> UnprocessedGameObjects = new();
         
-        public CellOcclusionInfo OcclusionInfo;
+        public readonly CellOcclusionInfoBuilder OcclusionInfoBuilder = new();
         
-        public float3 DefaultSpawnPosition;
+        public float3? DefaultSpawnPosition;
         
-        public quaternion DefaultSpawnRotation;
+        public quaternion? DefaultSpawnRotation;
         
-        public CellInfo(GameObject.GameObject rootGameObject)
+        public CellInfoBuilder(GameObject.GameObject rootGameObject)
         {
             RootGameObject = rootGameObject;
+        }
+        
+        public CellInfo Build()
+        {
+            return new CellInfo(this);
         }
     }
 }

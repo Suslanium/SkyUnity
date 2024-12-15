@@ -6,8 +6,8 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference.Base
 {
     public interface ICellReferenceDelegate
     {
-        public bool IsApplicable(CELL cell, REFR reference, Record referencedRecord);
+        public bool IsApplicable(CELL cell, REFR reference, Record referencedRecord, CellInfoBuilder resultBuilder);
 
-        public void ProcessReference(CELL cell, REFR reference, Record referencedRecord, CellInfo result);
+        public void ProcessReference(CELL cell, REFR reference, Record referencedRecord, CellInfoBuilder resultBuilder);
     }
 }

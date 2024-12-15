@@ -15,17 +15,17 @@ namespace Core.MasterFile.Converter.Cell
         private static readonly float3 One = new(1, 1, 1);
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void ApplyPositionAndRotation(float3 position, float3 rotation, float scale, GameObject modelObject)
+        public static void ApplyPositionAndRotation(float3 position, float3 rotation, float scale, GameObject gameObj)
         {
-            if (modelObject == null) return;
+            if (gameObj == null) return;
 
             if (scale != 0f)
             {
-                modelObject.LocalScale = scale * One;
+                gameObj.LocalScale = scale * One;
             }
 
-            TransformConverter.SkyrimPointToUnityPoint(position, out modelObject.Position);
-            TransformConverter.SkyrimRadiansToUnityQuaternion(rotation, out modelObject.Rotation);
+            TransformConverter.SkyrimPointToUnityPoint(position, out gameObj.Position);
+            TransformConverter.SkyrimRadiansToUnityQuaternion(rotation, out gameObj.Rotation);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

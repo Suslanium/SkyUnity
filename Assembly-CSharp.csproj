@@ -46,26 +46,19 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.27f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\BoxCollider.cs" />
-    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\DoorTeleport.cs" />
-    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\IUnprocessedComponent.cs" />
-    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Light.cs" />
-    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Localization\ILocalizableComponent.cs" />
-    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Localization\LocalizedStringInfo.cs" />
-    <Compile Include="Assets\Scripts\Core\Common\Utils.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\CellUtils.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\DoorDelegate.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\LightObjectDelegate.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\StaticObjectDelegate.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\CocPositionDelegate.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\OcclusionCullingDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TES4.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\CELLReader.cs" />
     <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Mesh\MeshInfo.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\MasterFileManagerCellExtension.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\ExtensionHelper.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\REFRReader.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\CellUtils.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ZlibBaseStream.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Manager\Extensions\MasterFileManagerLoadingScreenExtension.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Manager\MasterFileManager.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\StaticObjectDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Record.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\DoorTeleport.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\Builder\IRecordBuilder.cs" />
@@ -73,16 +66,17 @@
     <Compile Include="Assets\Scripts\Core\Common\Converter\TransformConverter.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\DOOR.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordReader.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\Utils.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TES4Reader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\LTEX.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\Int16Vector3.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\Base\ICellReferenceDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\MasterFile.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\MasterFileReader.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ZlibCodec.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\ZlibConstants.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\TREEReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\STATReader.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Light.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\LocalizedString.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Primitive.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Lighting.cs" />
@@ -94,11 +88,14 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Model\Model.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\PortalInfo.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\ReaderUtils.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Base\ICellRecordDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Mesh\AlternateTexture.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\DeflateStream.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\MasterFileProperties.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\MSTT.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\Tree.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\DoorTeleport.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\LightObjectDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FURN.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\STAT.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\Base\CellReferenceDelegateManager.cs" />
@@ -110,9 +107,11 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\TREE.cs" />
     <Compile Include="Assets\Scripts\Core\Common\CovariantReadOnlyDictionary.cs" />
     <Compile Include="Assets\Scripts\Core\Common\ILogger.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Localization\ILocalizableComponent.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LTEXReader.cs" />
     <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Mesh\UnprocessedMeshComponent.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\FieldReaderUtils.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Localization\LocalizedStringInfo.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\CellExtension.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\DI\MasterFileModule.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\ColorRGBA.cs" />
@@ -123,14 +122,15 @@
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\CRC32.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\WRLDReader.cs" />
     <Compile Include="Assets\Scripts\MasterFileTest.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\DoorDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\Common\External\IonicZlib\GZipStream.cs" />
     <Compile Include="Assets\Scripts\Core\Common\Structures\CellInfo.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\Landscape\TextureLayers.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LGTMReader.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\BoxCollider.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Group.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\Initialization\IMasterFileExtensionInitializer.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\MasterFileEntry.cs" />
-    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Base\ICellRecordDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\REFR.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Common\Structures\FullCellPosition.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\CELL.cs" />
@@ -138,6 +138,8 @@
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\LIGHReader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Structures\Records\FieldStructures\General\Float32Vector3.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\IUnprocessedComponent.cs" />
+    <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Reference\Base\ICellReferenceDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\Common\PreloadApis\IMeshPreloader.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Extensions\Initialization\CellExtensionInitializer.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Parser\Reader\RecordTypeReaders\MSTTReader.cs" />
@@ -1033,6 +1035,8 @@
     <Reference Include="Unity.InputSystem">
       <HintPath>E:\Unity Projects\SkyUnity\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

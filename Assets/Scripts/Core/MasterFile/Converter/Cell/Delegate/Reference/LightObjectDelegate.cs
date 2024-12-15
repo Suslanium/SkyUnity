@@ -27,15 +27,15 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
             _masterFileManager = masterFileManager;
         }
 
-        public bool IsApplicable(CELL cell, REFR reference, Record referencedRecord)
+        public bool IsApplicable(CELL cell, REFR reference, Record referencedRecord, CellInfoBuilder resultBuilder)
         {
             return referencedRecord is LIGH;
         }
 
-        public void ProcessReference(CELL cell, REFR reference, Record referencedRecord, CellInfo result)
+        public void ProcessReference(CELL cell, REFR reference, Record referencedRecord, CellInfoBuilder resultBuilder)
         {
             if (referencedRecord is not LIGH light) return;
-            var gameObj = new GameObject(light.EditorID ?? light.FormId.ToString(), result.RootGameObject);
+            var gameObj = new GameObject(light.EditorID ?? light.FormId.ToString(), resultBuilder.RootGameObject);
             
             var modelInfo = light.ModelInfo;
             if (modelInfo != null)
@@ -43,7 +43,7 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
                 var meshInfo = modelInfo.ToMeshInfo(_masterFileManager);
                 _meshPreloader.PreloadMesh(meshInfo);
                 gameObj.Components.Add(new UnprocessedMeshComponent(meshInfo));
-                result.UnprocessedGameObjects.Add(gameObj);
+                resultBuilder.UnprocessedGameObjects.Add(gameObj);
             }
 
             var lightComponent = new Light();

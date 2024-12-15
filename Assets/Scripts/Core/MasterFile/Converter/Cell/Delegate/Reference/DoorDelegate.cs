@@ -32,17 +32,17 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
             _masterFileManager = masterFileManager;
         }
 
-        public bool IsApplicable(CELL cell, REFR reference, Record referencedRecord)
+        public bool IsApplicable(CELL cell, REFR reference, Record referencedRecord, CellInfoBuilder resultBuilder)
         {
             //Only teleport doors are loaded because regular doors
             //will block the location without the ability to open them
             return referencedRecord is DOOR && reference.DoorTeleport != null;
         }
 
-        public void ProcessReference(CELL cell, REFR reference, Record referencedRecord, CellInfo result)
+        public void ProcessReference(CELL cell, REFR reference, Record referencedRecord, CellInfoBuilder resultBuilder)
         {
             if (referencedRecord is not DOOR door) return;
-            var gameObj = new GameObject(door.EditorID ?? door.FormId.ToString(), result.RootGameObject);
+            var gameObj = new GameObject(door.EditorID ?? door.FormId.ToString(), resultBuilder.RootGameObject);
             var isAddedToUnprocessed = false;
 
             //Try preloading the door model
@@ -52,7 +52,7 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
                 var meshInfo = modelInfo.ToMeshInfo(_masterFileManager);
                 _meshPreloader.PreloadMesh(meshInfo);
                 gameObj.Components.Add(new UnprocessedMeshComponent(meshInfo));
-                result.UnprocessedGameObjects.Add(gameObj);
+                resultBuilder.UnprocessedGameObjects.Add(gameObj);
                 isAddedToUnprocessed = true;
             }
 
@@ -98,7 +98,7 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
             
             if (!isAddedToUnprocessed)
             {
-                result.UnprocessedGameObjects.Add(gameObj);
+                resultBuilder.UnprocessedGameObjects.Add(gameObj);
             }
 
             //Apply the position and rotation to the door game object

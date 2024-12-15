@@ -20,12 +20,12 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
             _masterFileManager = masterFileManager;
         }
         
-        public bool IsApplicable(CELL cell, REFR reference, Record referencedRecord)
+        public bool IsApplicable(CELL cell, REFR reference, Record referencedRecord, CellInfoBuilder resultBuilder)
         {
             return referencedRecord is STAT or MSTT or FURN or TREE;
         }
 
-        public void ProcessReference(CELL cell, REFR reference, Record referencedRecord, CellInfo result)
+        public void ProcessReference(CELL cell, REFR reference, Record referencedRecord, CellInfoBuilder resultBuilder)
         {
             var modelInfo = referencedRecord switch
             {
@@ -48,10 +48,10 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
                 TREE tree => tree.EditorID,
                 _ => null
             };
-            var gameObj = new GameObject(editorId ?? referencedRecord.FormId.ToString(), result.RootGameObject);
+            var gameObj = new GameObject(editorId ?? referencedRecord.FormId.ToString(), resultBuilder.RootGameObject);
             CellUtils.ApplyPositionAndRotation(reference.Position.XYZ, reference.Rotation.XYZ, reference.Scale, gameObj);
             gameObj.Components.Add(new UnprocessedMeshComponent(meshInfo));
-            result.UnprocessedGameObjects.Add(gameObj);
+            resultBuilder.UnprocessedGameObjects.Add(gameObj);
         }
     }
 }

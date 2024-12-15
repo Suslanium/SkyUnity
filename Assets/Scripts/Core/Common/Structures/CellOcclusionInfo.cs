@@ -11,12 +11,23 @@ namespace Core.Common.Structures
         // Uints are the room Ids (FormIds)
         public readonly IReadOnlyList<(uint, uint)> RoomConnections;
 
-        public CellOcclusionInfo(IReadOnlyDictionary<uint, GameObject.GameObject> rooms,
-            IReadOnlyList<(GameObject.GameObject, uint, uint)> portals, IReadOnlyList<(uint, uint)> roomConnections)
+        public CellOcclusionInfo(CellOcclusionInfoBuilder builder)
         {
-            Rooms = rooms;
-            Portals = portals;
-            RoomConnections = roomConnections;
+            Rooms = builder.Rooms;
+            Portals = builder.Portals;
+            RoomConnections = builder.RoomConnections;
+        }
+    }
+    
+    public class CellOcclusionInfoBuilder
+    {
+        public readonly Dictionary<uint, GameObject.GameObject> Rooms = new();
+        public readonly List<(GameObject.GameObject, uint, uint)> Portals = new();
+        public readonly List<(uint, uint)> RoomConnections = new();
+        
+        public CellOcclusionInfo Build()
+        {
+            return new CellOcclusionInfo(this);
         }
     }
 }

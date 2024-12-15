@@ -15,21 +15,21 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference.Base
             _delegates = delegates;
         }
         
-        public void ProcessRecord(RawCellData rawCellData, REFR record, CellInfo result)
+        public void ProcessRecord(RawCellData rawCellData, REFR record, CellInfoBuilder resultBuilder)
         {
             if (!rawCellData.ReferenceBaseObjects.TryGetValue(record.BaseObjectFormId, out var referencedRecord))
             {
                 return;
             }
             
-            foreach (var preprocessDelegate in _delegates)
+            foreach (var processDelegate in _delegates)
             {
-                if (!preprocessDelegate.IsApplicable(rawCellData.CellRecord, record, referencedRecord))
+                if (!processDelegate.IsApplicable(rawCellData.CellRecord, record, referencedRecord, resultBuilder))
                 {
                     continue;
                 }
 
-                preprocessDelegate.ProcessReference(rawCellData.CellRecord, record, referencedRecord, result);
+                processDelegate.ProcessReference(rawCellData.CellRecord, record, referencedRecord, resultBuilder);
             }
         }
     }

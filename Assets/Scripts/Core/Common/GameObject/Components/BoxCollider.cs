@@ -14,5 +14,12 @@ namespace Core.Common.GameObject.Components
             Center = center;
             Size = size;
         }
+        
+        public BoxCollider(bool isTrigger, float3 size)
+        {
+            IsTrigger = isTrigger;
+            Center = float3.zero;
+            Size = size;
+        }
     }
 }
