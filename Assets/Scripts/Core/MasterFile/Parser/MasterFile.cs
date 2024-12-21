@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
 using Core.Common.DI;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Extensions;
 using Core.MasterFile.Parser.Reader;
 using Core.MasterFile.Parser.Structures;
@@ -27,9 +28,7 @@ namespace Core.MasterFile.Parser
 
         private readonly IReadOnlyDictionary<Type, IMasterFileExtension> _extensions;
 
-        public readonly TES4 FileHeader;
         public readonly MasterFileProperties Properties;
-        public readonly string FileName;
         public bool IsInitialized => _initializationTask.IsCompleted;
 
         public IReadOnlyDictionary<uint, long> FormIdToPosition => _formIdToPosition;
@@ -37,19 +36,17 @@ namespace Core.MasterFile.Parser
         public IReadOnlyDictionary<string, long> RecordTypeToGroupPosition => _recordTypeToGroupPosition;
         public readonly IReadOnlyDictionary<string, IReadOnlyDictionary<uint, long>> RecordTypeToFormIdToPosition;
 
-        public MasterFile(string fileName, BinaryReader fileReader, MasterFileReader reader,
+        public MasterFile(BinaryReader fileReader, MasterFileReader reader, string fileName, LoadOrderInfo loadOrderInfo,
             IFactory<IReadOnlyCollection<IMasterFileExtension>> extensionsFactory)
         {
-            FileName = fileName;
             _fileReader = fileReader;
             _reader = reader;
             RecordTypeToFormIdToPosition =
-                new CovariantReadOnlyDictionary<string, Dictionary<uint, long>, IReadOnlyDictionary<uint, long>>(
-                    _recordTypeToFormIdToPosition);
+                new CovariantReadOnlyDictionary<string, Dictionary<uint, long>, IReadOnlyDictionary<uint, long>>(_recordTypeToFormIdToPosition);
             _extensions = extensionsFactory.Create().ToDictionary(extension => extension.GetType());
             
-            FileHeader = _reader.ReadEntry(MasterFileProperties.DummyInstance, _fileReader, 0) as TES4;
-            Properties = MasterFileProperties.FromTES4(FileHeader);
+            var fileHeader = _reader.ReadEntry(MasterFileProperties.DummyInstance, _fileReader, 0) as TES4;
+            Properties = MasterFileProperties.FromTES4(fileHeader, fileName, loadOrderInfo);
             _initializationTask = Task.Run(Initialize);
         }
 
@@ -79,7 +76,7 @@ namespace Core.MasterFile.Parser
                 }
 
                 var entryStartPosition = _fileReader.BaseStream.Position;
-                var entry = _reader.ReadEntryHeader(_fileReader, _fileReader.BaseStream.Position);
+                var entry = MasterFileReader.ReadEntryHeader(Properties, _fileReader, _fileReader.BaseStream.Position);
                 switch (entry)
                 {
                     case Record record:
@@ -183,7 +180,7 @@ namespace Core.MasterFile.Parser
             lock (_fileReader)
             {
                 //Skip the found record before reading the following entry
-                _reader.ReadEntryHeader(_fileReader, position);
+                MasterFileReader.ReadEntryHeader(Properties, _fileReader, position);
 
                 return _reader.ReadEntry(Properties, _fileReader, _fileReader.BaseStream.Position);
             }
@@ -220,7 +217,9 @@ namespace Core.MasterFile.Parser
             //World Children/Cell (Persistent/Temporary) Children/Topic Children group types
             return group.GroupType is not 1 and not 6 and not 7 and not 8 and not 9
                 ? 0
-                : BitConverter.ToUInt32(group.Label);
+                // ReSharper disable once InconsistentlySynchronizedField
+                // (this field is read-only, so we don't care)
+                : ReaderUtils.ConvertRawFormId(Properties, BitConverter.ToUInt32(group.Label));
         }
 
         public void Dispose()

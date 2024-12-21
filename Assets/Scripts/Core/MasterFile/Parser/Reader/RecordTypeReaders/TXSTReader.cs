@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -61,9 +61,6 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     break;
                 case FlagsField:
                     builder.Flags = fileReader.ReadUInt16();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
                     break;
             }
         }

@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -22,7 +22,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
             FieldInfo fieldInfo, 
             TREEBuilder builder)
         {
-            if (fileReader.TryReadModelField(builder.ModelInfo, fieldInfo)) return;
+            if (fileReader.TryReadModelField(builder.ModelInfo, properties, fieldInfo)) return;
 
             switch (fieldInfo.Type)
             {
@@ -36,9 +36,6 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     fileReader.BaseStream.Seek(32, SeekOrigin.Current);
                     builder.LeafAmplitude = fileReader.ReadFloat32();
                     builder.LeafFrequency = fileReader.ReadFloat32();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
                     break;
             }
         }

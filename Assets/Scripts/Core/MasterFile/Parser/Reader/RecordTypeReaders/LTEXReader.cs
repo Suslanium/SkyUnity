@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -28,10 +28,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.EditorID = fileReader.ReadZString(fieldInfo.Size);
                     break;
                 case TextureFormIdField:
-                    builder.TextureFormID = fileReader.ReadFormId();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
+                    builder.TextureFormID = fileReader.ReadFormId(properties);
                     break;
             }
         }

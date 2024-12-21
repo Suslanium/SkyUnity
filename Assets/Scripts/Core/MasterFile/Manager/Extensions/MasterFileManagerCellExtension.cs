@@ -149,7 +149,7 @@ namespace Core.MasterFile.Manager.Extensions
             return GetCellData(new CellLoadRequest(masterFileToCellInLoadOrder, cellRecord));
         }
 
-        private static RawCellData GetCellData(CellLoadRequest request)
+        private RawCellData GetCellData(CellLoadRequest request)
         {
             var persistentChildren = new Dictionary<uint, Record>();
             var temporaryChildren = new Dictionary<uint, Record>();
@@ -186,8 +186,9 @@ namespace Core.MasterFile.Manager.Extensions
                         if (record is REFR reference && reference.BaseObjectFormId != 0 &&
                             !baseObjects.ContainsKey(reference.BaseObjectFormId))
                         {
-                            baseObjects[reference.BaseObjectFormId] =
-                                masterFile.GetFromFormId<Record>(reference.BaseObjectFormId);
+                            var baseRecord = MasterFileManager.GetFromFormId<Record>(reference.BaseObjectFormId);
+                            if (baseRecord == null) continue;
+                            baseObjects[reference.BaseObjectFormId] = baseRecord;
                         }
                     }
                 }

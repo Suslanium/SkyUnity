@@ -22,5 +22,20 @@ public class MasterFileTest : MonoBehaviour
         var masterFileManager = container.Resolve<MasterFileManager>();
         var loadingScreen = masterFileManager.GetRandomLoadingScreen();
         Debug.Log(loadingScreen.EditorID);
+        var stopwatch = new System.Diagnostics.Stopwatch();
+        stopwatch.Start();
+        var cell = masterFileManager.FindCellByEditorId("DLC1ArkngthamzExterior01");
+        var cellData = masterFileManager.GetCellData(cell.FormId);
+        Debug.Log(cellData.CellRecord.EditorID);
+        Debug.Log(stopwatch.ElapsedMilliseconds);
+        stopwatch.Stop();
+        stopwatch.Reset();
+        stopwatch.Start();
+        var cell2 = masterFileManager.FindCellByEditorId("DLC1ArkngthamzExterior02");
+        var cellData2 = masterFileManager.GetCellData(cell2.FormId);
+        Debug.Log(cellData2.CellRecord.EditorID);
+        Debug.Log(stopwatch.ElapsedMilliseconds);
+        stopwatch.Stop();
+        stopwatch.Reset();
     }
 }

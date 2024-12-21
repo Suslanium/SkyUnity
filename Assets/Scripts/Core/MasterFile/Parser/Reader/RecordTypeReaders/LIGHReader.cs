@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -26,7 +26,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
             FieldInfo fieldInfo,
             LIGHBuilder builder)
         {
-            if (fileReader.TryReadModelField(builder.ModelInfo, fieldInfo)) return;
+            if (fileReader.TryReadModelField(builder.ModelInfo, properties, fieldInfo)) return;
 
             switch (fieldInfo.Type)
             {
@@ -57,10 +57,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.Fade = fileReader.ReadFloat32();
                     break;
                 case HoldingSoundField:
-                    builder.HoldingSoundFormID = fileReader.ReadFormId();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
+                    builder.HoldingSoundFormID = fileReader.ReadFormId(properties);
                     break;
             }
         }

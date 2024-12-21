@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures;
 
 namespace Core.MasterFile.Parser.Reader
@@ -48,7 +49,10 @@ namespace Core.MasterFile.Parser.Reader
         /// Important thing to mention is that the position of the file reader is set to the start of
         /// the next entry if the read entry is a record, otherwise it is set to the start of the group's contents.
         /// </summary>
-        public MasterFileEntry ReadEntryHeader(BinaryReader fileReader, long entryStreamPosition)
+        public static MasterFileEntry ReadEntryHeader(
+            MasterFileProperties properties,
+            BinaryReader fileReader,
+            long entryStreamPosition)
         {
             fileReader.BaseStream.Seek(entryStreamPosition, SeekOrigin.Begin);
             var entryType = new string(fileReader.ReadChars(EntryTypeLength));
@@ -59,6 +63,7 @@ namespace Core.MasterFile.Parser.Reader
             else
             {
                 return RecordReader.ReadHeaderAndSkip(
+                    properties: properties,
                     recordType: entryType,
                     fileReader: fileReader,
                     streamPosition: fileReader.BaseStream.Position);

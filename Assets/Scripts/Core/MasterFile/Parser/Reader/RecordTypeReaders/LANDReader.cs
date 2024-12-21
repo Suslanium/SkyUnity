@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Core.Common;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Landscape;
@@ -81,14 +81,14 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.VertexColors = vertexColors;
                     break;
                 case BaseTextureField:
-                    var landTextureFormId = fileReader.ReadFormId();
+                    var landTextureFormId = fileReader.ReadFormId(properties);
                     var quadrant = fileReader.ReadByte();
                     fileReader.BaseStream.Seek(3, SeekOrigin.Current);
 
                     builder.BaseTextures.Add(new BaseTextureLayer(landTextureFormId, quadrant));
                     break;
                 case AdditionalTextureField:
-                    var additionalLandTextureFormId = fileReader.ReadFormId();
+                    var additionalLandTextureFormId = fileReader.ReadFormId(properties);
                     var additionalTextureQuadrant = fileReader.ReadByte();
                     fileReader.BaseStream.Seek(1, SeekOrigin.Current);
                     var layerIndex = fileReader.ReadUInt16();
@@ -110,9 +110,6 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                         builder.AdditionalTextures[^1].QuadrantAlphaMap[currentRow, currentColumn] =
                             alphaAtCurrentPosition;
                     }
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
                     break;
             }
         }

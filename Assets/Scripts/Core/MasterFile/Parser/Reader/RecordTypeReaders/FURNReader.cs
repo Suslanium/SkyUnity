@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -24,7 +24,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
             FieldInfo fieldInfo, 
             FURNBuilder builder)
         {
-            if (fileReader.TryReadModelField(builder.ModelInfo, fieldInfo)) return;
+            if (fileReader.TryReadModelField(builder.ModelInfo, properties, fieldInfo)) return;
 
             switch (fieldInfo.Type)
             {
@@ -39,10 +39,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.WorkbenchSkill = fileReader.ReadByte();
                     break;
                 case InteractionKeywordField:
-                    builder.InteractionKeyword = fileReader.ReadFormId();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
+                    builder.InteractionKeyword = fileReader.ReadFormId(properties);
                     break;
             }
         }

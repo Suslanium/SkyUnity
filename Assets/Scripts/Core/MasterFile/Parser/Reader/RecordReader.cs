@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Core.Common;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures;
 using Ionic.Zlib;
 
@@ -22,9 +23,13 @@ namespace Core.MasterFile.Parser.Reader
         /// <summary>
         /// Warning: stream position should be after the record type.
         /// </summary>
-        public static Record ReadHeaderAndSkip(string recordType, BinaryReader fileReader, long streamPosition)
+        public static Record ReadHeaderAndSkip(
+            MasterFileProperties properties, 
+            string recordType, 
+            BinaryReader fileReader, 
+            long streamPosition)
         {
-            var baseRecordInfo = ReadBasicInfo(recordType, fileReader, streamPosition);
+            var baseRecordInfo = ReadBasicInfo(properties, recordType, fileReader, streamPosition);
             var recordDataStart = fileReader.BaseStream.Position;
             fileReader.BaseStream.Seek(recordDataStart + baseRecordInfo.DataSize, SeekOrigin.Begin);
             return baseRecordInfo;
@@ -40,7 +45,7 @@ namespace Core.MasterFile.Parser.Reader
             long streamPosition)
         {
             Record result;
-            var recordInfo = ReadBasicInfo(recordType, fileReader, streamPosition);
+            var recordInfo = ReadBasicInfo(properties, recordType, fileReader, streamPosition);
             var recordDataStart = fileReader.BaseStream.Position;
             if (!_recordTypeReaders.TryGetValue(recordType, out var recordReader))
             {
@@ -81,14 +86,18 @@ namespace Core.MasterFile.Parser.Reader
             return result;
         }
 
-        private static Record ReadBasicInfo(string recordType, BinaryReader fileReader, long streamPosition)
+        private static Record ReadBasicInfo(
+            MasterFileProperties properties, 
+            string recordType, 
+            BinaryReader fileReader, 
+            long streamPosition)
         {
             fileReader.BaseStream.Seek(streamPosition, SeekOrigin.Begin);
             return new Record(
                 type: recordType,
                 dataSize: fileReader.ReadUInt32(),
                 flag: fileReader.ReadUInt32(),
-                formID: fileReader.ReadFormId(),
+                formID: fileReader.ReadFormId(properties),
                 timestamp: fileReader.ReadUInt16(),
                 versionControlInfo: fileReader.ReadUInt16(),
                 internalRecordVersion: fileReader.ReadUInt16(),

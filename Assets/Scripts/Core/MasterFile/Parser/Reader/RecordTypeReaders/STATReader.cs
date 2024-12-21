@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -22,7 +22,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
             FieldInfo fieldInfo, 
             STATBuilder builder)
         {
-            if (fileReader.TryReadModelField(builder.ModelInfo, fieldInfo)) return;
+            if (fileReader.TryReadModelField(builder.ModelInfo, properties, fieldInfo)) return;
 
             switch (fieldInfo.Type)
             {
@@ -31,10 +31,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     break;
                 case DataField:
                     builder.DirMaterialMaxAngle = fileReader.ReadFloat32();
-                    builder.DirectionalMaterialFormID = fileReader.ReadFormId();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
+                    builder.DirectionalMaterialFormID = fileReader.ReadFormId(properties);
                     break;
             }
         }

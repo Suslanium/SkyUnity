@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -27,7 +27,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
             FieldInfo fieldInfo, 
             DOORBuilder builder)
         {
-            if (fileReader.TryReadModelField(builder.ModelInfo, fieldInfo)) return;
+            if (fileReader.TryReadModelField(builder.ModelInfo, properties, fieldInfo)) return;
             
             switch (fieldInfo.Type)
             {
@@ -38,22 +38,19 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.Bounds = fileReader.ReadObjectBounds();
                     break;
                 case OpenSoundField:
-                    builder.OpenSound = fileReader.ReadFormId();
+                    builder.OpenSound = fileReader.ReadFormId(properties);
                     break;
                 case CloseSoundField:
-                    builder.CloseSound = fileReader.ReadFormId();
+                    builder.CloseSound = fileReader.ReadFormId(properties);
                     break;
                 case LoopSoundField:
-                    builder.LoopSound = fileReader.ReadFormId();
+                    builder.LoopSound = fileReader.ReadFormId(properties);
                     break;
                 case FlagsField:
                     builder.Flags = fileReader.ReadByte();
                     break;
                 case RandomTeleportField:
-                    builder.RandomTeleports.Add(fileReader.ReadFormId());
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
+                    builder.RandomTeleports.Add(fileReader.ReadFormId(properties));
                     break;
             }
         }

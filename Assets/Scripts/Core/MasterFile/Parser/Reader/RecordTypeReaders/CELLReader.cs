@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -47,36 +47,34 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                 case GridPositionField:
                     builder.XGridPosition = fileReader.ReadInt32();
                     builder.YGridPosition = fileReader.ReadInt32();
+                    fileReader.BaseStream.Seek(4, SeekOrigin.Current);
                     break;
                 case LightingField:
                     builder.LightingInfo = fileReader.ReadLightingField(fieldInfo.Size);
                     break;
                 case LightingTemplateFormIdField:
-                    builder.LightingTemplateFormId = fileReader.ReadFormId();
+                    builder.LightingTemplateFormId = fileReader.ReadFormId(properties);
                     break;
                 case WaterHeightField:
                     builder.NonOceanWaterHeight = fileReader.ReadFloat32();
                     break;
                 case LocationFormIdField:
-                    builder.LocationFormId = fileReader.ReadFormId();
+                    builder.LocationFormId = fileReader.ReadFormId(properties);
                     break;
                 case WaterFormIdField:
-                    builder.WaterFormId = fileReader.ReadFormId();
+                    builder.WaterFormId = fileReader.ReadFormId(properties);
                     break;
                 case WaterEnvironmentMapField:
                     builder.WaterEnvironmentMap = fileReader.ReadZString(fieldInfo.Size);
                     break;
                 case AcousticSpaceFormIdField:
-                    builder.AcousticSpaceFormId = fileReader.ReadFormId();
+                    builder.AcousticSpaceFormId = fileReader.ReadFormId(properties);
                     break;
                 case MusicTypeFormIdField:
-                    builder.MusicTypeFormId = fileReader.ReadFormId();
+                    builder.MusicTypeFormId = fileReader.ReadFormId(properties);
                     break;
                 case ImageSpaceFormIdField:
-                    builder.ImageSpaceFormId = fileReader.ReadFormId();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
+                    builder.ImageSpaceFormId = fileReader.ReadFormId(properties);
                     break;
             }
         }

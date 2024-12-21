@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -43,19 +43,19 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.CenterCellGridY = fileReader.ReadInt16();
                     break;
                 case InteriorLightingFormIdField:
-                    builder.InteriorLightingFormId = fileReader.ReadFormId();
+                    builder.InteriorLightingFormId = fileReader.ReadFormId(properties);
                     break;
                 case FlagsField:
                     builder.WorldFlag = fileReader.ReadByte();
                     break;
                 case ParentWorldSpaceFormIdField:
-                    builder.ParentWorldFormId = fileReader.ReadFormId();
+                    builder.ParentWorldFormId = fileReader.ReadFormId(properties);
                     break;
                 case ExitLocationFormIdField:
-                    builder.ExitLocationFormId = fileReader.ReadFormId();
+                    builder.ExitLocationFormId = fileReader.ReadFormId(properties);
                     break;
                 case ClimateFormIdField:
-                    builder.ClimateFormId = fileReader.ReadFormId();
+                    builder.ClimateFormId = fileReader.ReadFormId(properties);
                     break;
                 case LandDataField:
                     builder.LandLevel = fileReader.ReadFloat32();
@@ -63,9 +63,6 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     break;
                 case ParentWorldSpaceFlagsField:
                     builder.ParentWorldRelatedFlags = fileReader.ReadUInt16();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
                     break;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures;
 using Core.MasterFile.Parser.Structures.Records.Builder;
 
@@ -54,8 +55,8 @@ namespace Core.MasterFile.Parser.Reader
             {
                 var fieldInfo = new FieldInfo(
                     type: new string(fileReader.ReadChars(FieldTypeLength)),
-                    size: fileReader.ReadUInt16()
-                );
+                    size: fileReader.ReadUInt16());
+
                 //Due to field size being limited to a 16-bit integer,
                 //XXXX fields are used to specify a 32-bit size of the next field
                 if (fieldInfo.Type == LongFieldSize)
@@ -69,7 +70,10 @@ namespace Core.MasterFile.Parser.Reader
                     fileReader.BaseStream.Seek(2, SeekOrigin.Current);
                 }
 
+                var fieldDataStartPosition = fileReader.BaseStream.Position;
                 ReadField(properties, fileReader, fieldInfo, builder);
+                //Fail-safe in case the field was not read correctly
+                fileReader.BaseStream.Seek(fieldDataStartPosition + fieldInfo.Size, SeekOrigin.Begin);
             }
 
             return builder.Build();

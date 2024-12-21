@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -45,14 +45,11 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                 case OverridenFormsField:
                     for (var i = 0; i < fieldInfo.Size / 4; i++)
                     {
-                        builder.OverridenForms.Add(fileReader.ReadFormId());
+                        builder.OverridenForms.Add(fileReader.ReadFormId(properties));
                     }
                     break;
                 case NumberOfTagifiableStringsField:
                     builder.NumberOfTagifiableStrings = fileReader.ReadUInt32();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
                     break;
             }
         }

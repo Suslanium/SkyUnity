@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.Model;
 
@@ -9,7 +10,11 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
         private const string ModelPathField = "MODL";
         private const string AlternateTextureField = "MODS";
         
-        public static bool TryReadModelField(this BinaryReader fileReader, ModelBuilder builder, FieldInfo fieldInfo)
+        public static bool TryReadModelField(
+            this BinaryReader fileReader, 
+            ModelBuilder builder, 
+            MasterFileProperties properties, 
+            FieldInfo fieldInfo)
         {
             switch (fieldInfo.Type)
             {
@@ -22,7 +27,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     {
                         var objectNameLength = checked((int)fileReader.ReadUInt32());
                         var objectName = fileReader.ReadString(objectNameLength);
-                        var textureSetFormID = fileReader.ReadFormId();
+                        var textureSetFormID = fileReader.ReadFormId(properties);
                         var index = fileReader.ReadUInt32();
                         builder.AlternateTextures.Add(new AlternateTexture(objectName, index, textureSetFormID));
                     }

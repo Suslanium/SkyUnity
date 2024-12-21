@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
@@ -28,7 +28,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.EditorID = fileReader.ReadZString(fieldInfo.Size);
                     break;
                 case StaticObjectFormIdField:
-                    builder.StaticObjectFormID = fileReader.ReadFormId();
+                    builder.StaticObjectFormID = fileReader.ReadFormId(properties);
                     break;
                 case ScaleField:
                     builder.InitialScale = fileReader.ReadFloat32();
@@ -42,9 +42,6 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     break;
                 case TranslationField:
                     builder.InitialTranslation = fileReader.ReadFloat32Vector3();
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
                     break;
             }
         }

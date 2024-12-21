@@ -1,5 +1,7 @@
+using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures.General;
 
 namespace Core.MasterFile.Parser.Reader
@@ -43,11 +45,36 @@ namespace Core.MasterFile.Parser.Reader
         {
             return reader.ReadSByte();
         }
-
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint ReadFormId(this BinaryReader reader)
+        public static uint ReadFormId(this BinaryReader reader, MasterFileProperties properties)
         {
-            return reader.ReadUInt32();
+            var rawFormId = reader.ReadUInt32();
+            return ConvertRawFormId(properties, rawFormId);
+        }
+
+        //TODO Light master (.esl) support
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static uint ConvertRawFormId(MasterFileProperties properties, uint rawFormId)
+        {
+            //The first two hex digits of the form id are the form id's index
+            //For better understanding, it is recommended to read this article:
+            //https://stepmodifications.org/wiki/Guide:Plugins_Files
+            var formIdIndex = checked((byte)((rawFormId & 0xFF000000) >> 24));
+            if (formIdIndex >= properties.MasterCount)
+            {
+                //New record
+                //Replace the first two hex digits with the load order index
+                return (rawFormId & 0x00FFFFFF) | (uint)(properties.LoadOrderInfo.LoadOrderIndex << 24);
+            }
+            else
+            {
+                //Override record
+                var masterName = properties.FileMasters[formIdIndex];
+                var masterIndex = Array.IndexOf(properties.LoadOrderInfo.LoadOrder, masterName);
+                //Replace the first two hex digits with the load order index
+                return (rawFormId & 0x00FFFFFF) | (uint)(masterIndex << 24);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Core.MasterFile.Parser.Structures;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Parser.Structures.Records;
 using Core.MasterFile.Parser.Structures.Records.FieldStructures;
 
@@ -44,7 +44,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.EditorID = fileReader.ReadZString(fieldInfo.Size);
                     break;
                 case ReferenceFormIdField:
-                    builder.BaseObjectFormId = fileReader.ReadFormId();
+                    builder.BaseObjectFormId = fileReader.ReadFormId(properties);
                     break;
                 case PrimitiveField:
                     var bounds = fileReader.ReadFloat32Vector3();
@@ -54,36 +54,36 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.Primitive = new Primitive(bounds, color, unknownFloat, unknownInt);
                     break;
                 case PortalDestinationsField:
-                    var originFormID = fileReader.ReadFormId();
-                    var destinationFormID = fileReader.ReadFormId();
+                    var originFormID = fileReader.ReadFormId(properties);
+                    var destinationFormID = fileReader.ReadFormId(properties);
                     builder.PortalDestinations = new PortalInfo(
                         originFormID,
                         destinationFormID);
                     break;
                 case LightingTemplateFormIdField:
-                    builder.LightingTemplateFormId = fileReader.ReadFormId();
+                    builder.LightingTemplateFormId = fileReader.ReadFormId(properties);
                     break;
                 case ImageSpaceFormIdField:
-                    builder.ImageSpaceFormId = fileReader.ReadFormId();
+                    builder.ImageSpaceFormId = fileReader.ReadFormId(properties);
                     break;
                 case LinkedRoomFormIdsField:
-                    builder.LinkedRoomFormIds.Add(fileReader.ReadFormId());
+                    builder.LinkedRoomFormIds.Add(fileReader.ReadFormId(properties));
                     break;
                 case EmittedLightFormIdField:
-                    builder.EmittedLightFormId = fileReader.ReadFormId();
+                    builder.EmittedLightFormId = fileReader.ReadFormId(properties);
                     break;
                 case DoorTeleportInfoFormIdField:
                     builder.DoorTeleport = new DoorTeleport(
-                        destinationDoorReference: fileReader.ReadFormId(),
+                        destinationDoorReference: fileReader.ReadFormId(properties),
                         destinationPosition: fileReader.ReadFloat32Vector3(),
                         destinationRotation: fileReader.ReadFloat32Vector3(),
                         flag: fileReader.ReadUInt32());
                     break;
                 case LeveledItemBaseFormIdField:
-                    builder.LeveledItemBaseFormId = fileReader.ReadFormId();
+                    builder.LeveledItemBaseFormId = fileReader.ReadFormId(properties);
                     break;
                 case LocationFormIdField:
-                    builder.LocationReferenceFormId = fileReader.ReadFormId();
+                    builder.LocationReferenceFormId = fileReader.ReadFormId(properties);
                     break;
                 case LocationalDataField:
                     builder.Position = fileReader.ReadFloat32Vector3();
@@ -99,9 +99,6 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     fileReader.BaseStream.Seek(4, SeekOrigin.Current);
                     builder.FadeOffset = fileReader.ReadFloat32();
                     fileReader.BaseStream.Seek(fieldInfo.Size == 16 ? 8 : 12, SeekOrigin.Current);
-                    break;
-                default:
-                    fileReader.BaseStream.Seek(fieldInfo.Size, SeekOrigin.Current);
                     break;
             }
         }

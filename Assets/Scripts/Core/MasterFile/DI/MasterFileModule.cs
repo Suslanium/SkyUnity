@@ -2,6 +2,7 @@
 using System.IO;
 using Core.Common;
 using Core.Common.DI;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Manager;
 using Core.MasterFile.Manager.Extensions;
 using Core.MasterFile.Parser.Extensions;
@@ -11,10 +12,9 @@ using Core.MasterFile.Parser.Reader.RecordTypeReaders;
 
 namespace Core.MasterFile.DI
 {
-    //TODO move to master file module (this shouldn't be in the core module)
     public static class MasterFileModule
     {
-        public static Module Create(IReadOnlyCollection<string> masterFilePaths)
+        public static Module Create(IReadOnlyList<string> masterFilePaths)
         {
             return Module.Create(module =>
             {
@@ -43,24 +43,20 @@ namespace Core.MasterFile.DI
                 module.RegisterSingleton(container => new MasterFileReader(container.Resolve<RecordReader>()));
 
                 module.RegisterFactory((_, _) => new CellExtensionInitializer());
-                module.RegisterFactory<IReadOnlyCollection<IMasterFileExtension>>(
-                    (container, _) => new List<IMasterFileExtension>
+                module.RegisterFactory<IReadOnlyCollection<IMasterFileExtension>>((container, _) => new List<IMasterFileExtension>
                     {
                         new CellExtension(container.Resolve<CellExtensionInitializer>()),
                     });
-                module.RegisterSingleton<IReadOnlyCollection<MasterFile.Parser.MasterFile>>(container =>
+                module.RegisterFactory((container, arguments) =>
                 {
-                    var list = new List<MasterFile.Parser.MasterFile>();
-                    foreach (var masterFilePath in masterFilePaths)
-                    {
-                        var fileName = Path.GetFileName(masterFilePath);
-                        var binaryReader = new BinaryReader(File.Open(masterFilePath, FileMode.Open));
-                        list.Add(new MasterFile.Parser.MasterFile(fileName, binaryReader,
-                            container.Resolve<MasterFileReader>(),
-                            container.Resolve<IFactory<IReadOnlyCollection<IMasterFileExtension>>>()));
-                    }
-
-                    return list;
+                    var filePath = arguments.GetNamedArgument<string>(MasterFileManager.FilePathArgumentName);
+                    var binaryReader = new BinaryReader(File.Open(filePath, FileMode.Open));
+                    var fileName = arguments.GetNamedArgument<string>(MasterFileManager.FileNameArgumentName);
+                    return new MasterFile.Parser.MasterFile(binaryReader,
+                        container.Resolve<MasterFileReader>(),
+                        fileName,
+                        arguments.GetArgument<LoadOrderInfo>(),
+                        container.Resolve<IFactory<IReadOnlyCollection<IMasterFileExtension>>>());
                 });
 
                 module.RegisterFactory<IReadOnlyCollection<MasterFileManagerExtension>>(
@@ -69,9 +65,9 @@ namespace Core.MasterFile.DI
                         new MasterFileManagerCellExtension(arguments.GetArgument<MasterFileManager>()),
                         new MasterFileManagerLoadingScreenExtension(arguments.GetArgument<MasterFileManager>()),
                     });
-                module.RegisterSingleton(container =>
-                    new MasterFileManager(container.Resolve<IReadOnlyCollection<MasterFile.Parser.MasterFile>>(),
-                        container.Resolve<IFactory<IReadOnlyCollection<MasterFileManagerExtension>>>()));
+                module.RegisterSingleton(container => new MasterFileManager(masterFilePaths,
+                    container.Resolve<IFactory<MasterFile.Parser.MasterFile>>(),
+                    container.Resolve<IFactory<IReadOnlyCollection<MasterFileManagerExtension>>>()));
             });
         }
     }

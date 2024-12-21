@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Common.DI;
+using Core.MasterFile.Common.Structures;
 using Core.MasterFile.Manager.Extensions;
 using Core.MasterFile.Parser.Structures;
 
@@ -11,9 +13,13 @@ namespace Core.MasterFile.Manager
 {
     public class MasterFileManager : IDisposable
     {
+        public static string FilePathArgumentName = "MasterFilePath";
+        public static string FileNameArgumentName = "MasterFileName";
+        
         private readonly Dictionary<string, Parser.MasterFile> _masterFiles = new();
         private readonly List<string> _reverseLoadOrder = new();
         private readonly Dictionary<Type, MasterFileManagerExtension> _extensions = new();
+        private readonly ConcurrentDictionary<uint, Record> _recordCache = new();
         private bool _masterFilesAreInitialized;
 
         public IReadOnlyDictionary<string, Parser.MasterFile> MasterFiles => _masterFiles;
@@ -21,22 +27,34 @@ namespace Core.MasterFile.Manager
         public readonly Task MasterFilesInitialization;
 
         public MasterFileManager(
-            IReadOnlyCollection<Parser.MasterFile> masterFiles,
+            IReadOnlyList<string> masterFilePaths,
+            IFactory<Parser.MasterFile> masterFileProvider,
             IFactory<IReadOnlyCollection<MasterFileManagerExtension>> masterFileManagerExtensionsFactory)
         {
-            foreach (var masterFile in masterFiles)
+            var loadOrder = masterFilePaths.Select(Path.GetFileName).ToArray();
+            for (byte loadOrderIndex = 0; loadOrderIndex < masterFilePaths.Count; loadOrderIndex++)
             {
-                var missingMasters = masterFile.FileHeader.MasterFiles
+                var filePath = masterFilePaths[loadOrderIndex];
+                var fileName = Path.GetFileName(filePath);
+                var loadOrderInfo = new LoadOrderInfo(loadOrder, loadOrderIndex);
+                var masterFile = masterFileProvider.Create(configurator =>
+                {
+                    configurator.SetNamedArgument(FilePathArgumentName, filePath);
+                    configurator.SetNamedArgument(FileNameArgumentName, fileName);
+                    configurator.SetArgument(loadOrderInfo);
+                });
+                
+                var missingMasters = masterFile.Properties.FileMasters
                     .Where(masterName => !_masterFiles.ContainsKey(masterName)).ToList();
                 if (missingMasters.Count > 0)
                 {
                     throw new FileNotFoundException(
                         $"Incorrect load order: masterfile(s) {string.Join(',', missingMasters)} " +
-                        $"required for {masterFile.FileName} not found.");
+                        $"required for {masterFile.Properties.FileName} not found.");
                 }
 
-                _masterFiles.Add(masterFile.FileName, masterFile);
-                _reverseLoadOrder.Insert(0, masterFile.FileName);
+                _masterFiles.Add(masterFile.Properties.FileName, masterFile);
+                _reverseLoadOrder.Insert(0, masterFile.Properties.FileName);
             }
             
             var masterFileManagerExtensions = 
@@ -73,11 +91,18 @@ namespace Core.MasterFile.Manager
 
         public T GetFromFormId<T>(uint formId) where T : Record
         {
+            if (_recordCache.TryGetValue(formId, out var cachedRecord))
+            {
+                return (T) cachedRecord;
+            }
+            
             MasterFilesInitialization.Wait();
 
             var masterFileName = 
                 ReverseLoadOrder.FirstOrDefault(fileName => MasterFiles[fileName].RecordExists(formId));
-            return masterFileName == null ? null : MasterFiles[masterFileName].GetFromFormId<T>(formId);
+            var record = masterFileName == null ? null : MasterFiles[masterFileName].GetFromFormId<T>(formId);
+            _recordCache[formId] = record;
+            return record;
         }
 
         /// <summary>
