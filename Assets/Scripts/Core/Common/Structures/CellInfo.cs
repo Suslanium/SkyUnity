@@ -11,6 +11,8 @@ namespace Core.Common.Structures
         
         public readonly CellOcclusionInfo OcclusionInfo;
         
+        public readonly CellLightingInfo LightingInfo;
+        
         public readonly float3? DefaultSpawnPosition;
         
         public readonly quaternion? DefaultSpawnRotation;
@@ -20,6 +22,7 @@ namespace Core.Common.Structures
             RootGameObject = builder.RootGameObject;
             UnprocessedGameObjects = builder.UnprocessedGameObjects;
             OcclusionInfo = builder.OcclusionInfoBuilder.Build();
+            LightingInfo = builder.LightingInfoBuilder.Build();
             DefaultSpawnPosition = builder.DefaultSpawnPosition;
             DefaultSpawnRotation = builder.DefaultSpawnRotation;
         }
@@ -32,6 +35,8 @@ namespace Core.Common.Structures
         public readonly List<GameObject.GameObject> UnprocessedGameObjects = new();
         
         public readonly CellOcclusionInfoBuilder OcclusionInfoBuilder = new();
+        
+        public readonly CellLightingInfoBuilder LightingInfoBuilder = new();
         
         public float3? DefaultSpawnPosition;
         
