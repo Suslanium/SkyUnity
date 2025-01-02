@@ -39,7 +39,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.EditorID = fileReader.ReadZString(fieldInfo.Size);
                     break;
                 case LocalizedNameField:
-                    builder.Name = fileReader.ReadLocalizedString(fieldInfo.Size, properties.IsLocalized);
+                    builder.Name = fileReader.ReadLocalizedString(fieldInfo.Size, properties);
                     break;
                 case FlagsField:
                     builder.CellFlag = fieldInfo.Size == 1 ? fileReader.ReadByte() : fileReader.ReadUInt16();

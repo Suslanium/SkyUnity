@@ -36,7 +36,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.EditorID = fileReader.ReadZString(fieldInfo.Size);
                     break;
                 case LocalizedNameField:
-                    builder.InGameName = fileReader.ReadLocalizedString(fieldInfo.Size, properties.IsLocalized);
+                    builder.InGameName = fileReader.ReadLocalizedString(fieldInfo.Size, properties);
                     break;
                 case CenterCellCoordinatesField:
                     builder.CenterCellGridX = fileReader.ReadInt16();

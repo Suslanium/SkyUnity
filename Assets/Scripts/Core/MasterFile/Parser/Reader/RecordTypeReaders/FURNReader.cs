@@ -32,7 +32,7 @@ namespace Core.MasterFile.Parser.Reader.RecordTypeReaders
                     builder.EditorID = fileReader.ReadZString(fieldInfo.Size);
                     break;
                 case InGameNameField:
-                    builder.InGameName = fileReader.ReadLocalizedString(fieldInfo.Size, properties.IsLocalized);
+                    builder.InGameName = fileReader.ReadLocalizedString(fieldInfo.Size, properties);
                     break;
                 case WorkbenchInfoField:
                     builder.WorkbenchType = fileReader.ReadByte();

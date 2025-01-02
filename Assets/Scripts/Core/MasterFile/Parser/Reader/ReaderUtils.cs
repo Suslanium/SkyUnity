@@ -121,11 +121,11 @@ namespace Core.MasterFile.Parser.Reader
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static LocalizedString ReadLocalizedString(this BinaryReader reader, int length, bool isFileLocalized)
+        public static LocalizedString ReadLocalizedString(this BinaryReader reader, int length, MasterFileProperties properties)
         {
-            return isFileLocalized
-                ? new LocalizedString(reader.ReadUInt32())
-                : new LocalizedString(reader.ReadZString(length));
+            return properties.IsLocalized
+                ? new LocalizedString(reader.ReadUInt32(), properties.FileName)
+                : new LocalizedString(reader.ReadZString(length), properties.FileName);
         }
     }
 }

@@ -6,18 +6,21 @@ namespace Core.MasterFile.Parser.Structures.Records.FieldStructures.General
     {
         public readonly bool IsLoaded;
         public readonly uint Index;
+        public readonly string PluginName;
         public readonly string Value;
 
-        public LocalizedString(uint index)
+        public LocalizedString(uint index, string pluginName)
         {
             Index = index;
+            PluginName = pluginName;
             Value = null;
             IsLoaded = false;
         }
 
-        public LocalizedString(string value)
+        public LocalizedString(string value, string pluginName)
         {
             Index = 0;
+            PluginName = pluginName;
             Value = value;
             IsLoaded = true;
         }
@@ -27,6 +30,7 @@ namespace Core.MasterFile.Parser.Structures.Records.FieldStructures.General
             return new LocalizedStringInfo(
                 fallback,
                 Index,
+                PluginName,
                 Value,
                 IsLoaded);
         }
