@@ -46,6 +46,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.27f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Terrain.cs" />
     <Compile Include="Assets\Scripts\Core\Common\Structures\CellLightingInfo.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Base\ICellDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\CellLightingDelegate.cs" />
