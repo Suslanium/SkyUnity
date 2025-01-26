@@ -6,6 +6,8 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Base
 {
     public interface ICellRecordDelegate<T> where T : Record
     {
+        public bool IsConcurrent => false;
+
         public void ProcessRecord(RawCellData rawCellData, T record, CellInfoBuilder resultBuilder);
     }
 }

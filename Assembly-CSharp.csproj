@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Core\Common\GameObject\Components\Terrain.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\PreloadApis\Texture\ITexturePreloader.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\PreloadApis\Texture\TextureType.cs" />
     <Compile Include="Assets\Scripts\Core\Common\Structures\CellLightingInfo.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\Base\ICellDelegate.cs" />
     <Compile Include="Assets\Scripts\Core\MasterFile\Converter\Cell\Delegate\CellLightingDelegate.cs" />
@@ -1041,8 +1043,6 @@
     <Reference Include="Unity.InputSystem">
       <HintPath>E:\Unity Projects\SkyUnity\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
