@@ -1,6 +1,5 @@
 ﻿using Core.Common.GameObject;
 using Core.Common.GameObject.Components.Mesh;
-using Core.Common.PreloadApis;
 using Core.Common.Structures;
 using Core.MasterFile.Converter.Cell.Delegate.Reference.Base;
 using Core.MasterFile.Manager;
@@ -11,12 +10,10 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
 {
     public class StaticObjectDelegate : ICellReferenceDelegate
     {
-        private readonly IMeshPreloader _meshPreloader;
         private readonly MasterFileManager _masterFileManager;
 
-        public StaticObjectDelegate(IMeshPreloader meshPreloader, MasterFileManager masterFileManager)
+        public StaticObjectDelegate(MasterFileManager masterFileManager)
         {
-            _meshPreloader = meshPreloader;
             _masterFileManager = masterFileManager;
         }
         
@@ -38,7 +35,6 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
             if (modelInfo == null) return;
 
             var meshInfo = modelInfo.ToMeshInfo(_masterFileManager);
-            _meshPreloader.PreloadMesh(meshInfo);
             
             var editorId = referencedRecord switch
             {

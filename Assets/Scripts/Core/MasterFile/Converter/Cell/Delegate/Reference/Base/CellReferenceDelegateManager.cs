@@ -6,7 +6,7 @@ using Core.MasterFile.Parser.Structures.Records;
 
 namespace Core.MasterFile.Converter.Cell.Delegate.Reference.Base
 {
-    public class CellReferenceDelegateManager : ICellRecordDelegate<REFR>
+    public class CellReferenceDelegateManager : CellRecordDelegate<REFR>
     {
         private readonly IReadOnlyList<ICellReferenceDelegate> _delegates;
         
@@ -15,7 +15,7 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference.Base
             _delegates = delegates;
         }
         
-        public void ProcessRecord(RawCellData rawCellData, REFR record, CellInfoBuilder resultBuilder)
+        protected override void ProcessRecord(RawCellData rawCellData, REFR record, CellInfoBuilder resultBuilder)
         {
             if (!rawCellData.ReferenceBaseObjects.TryGetValue(record.BaseObjectFormId, out var referencedRecord))
             {

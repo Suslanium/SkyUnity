@@ -1,6 +1,5 @@
 ﻿using Core.Common;
 using Core.Common.GameObject.Components.Mesh;
-using Core.Common.PreloadApis;
 using Core.Common.Structures;
 using Core.MasterFile.Converter.Cell.Delegate.Reference.Base;
 using Core.MasterFile.Manager;
@@ -14,16 +13,14 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
 {
     public class LightObjectDelegate : ICellReferenceDelegate
     {
-        private readonly IMeshPreloader _meshPreloader;
         private readonly MasterFileManager _masterFileManager;
 
         private const uint ShadowSpotLightFlagMask = 0x0400;
         private const uint ShadowHemisphereLightMask = 0x0800;
         private const uint ShadowOmnidirectionalLightMask = 0x1000;
 
-        public LightObjectDelegate(IMeshPreloader meshPreloader, MasterFileManager masterFileManager)
+        public LightObjectDelegate(MasterFileManager masterFileManager)
         {
-            _meshPreloader = meshPreloader;
             _masterFileManager = masterFileManager;
         }
 
@@ -41,7 +38,6 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
             if (modelInfo != null)
             {
                 var meshInfo = modelInfo.ToMeshInfo(_masterFileManager);
-                _meshPreloader.PreloadMesh(meshInfo);
                 gameObj.Components.Add(new UnprocessedMeshComponent(meshInfo));
                 resultBuilder.UnprocessedGameObjects.Add(gameObj);
             }

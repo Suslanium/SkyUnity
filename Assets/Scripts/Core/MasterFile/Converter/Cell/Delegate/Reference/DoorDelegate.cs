@@ -3,7 +3,6 @@ using Core.Common;
 using Core.Common.Converter;
 using Core.Common.GameObject.Components;
 using Core.Common.GameObject.Components.Mesh;
-using Core.Common.PreloadApis;
 using Core.Common.Structures;
 using Core.MasterFile.Converter.Cell.Delegate.Reference.Base;
 using Core.MasterFile.Manager;
@@ -19,16 +18,14 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
 {
     public class DoorDelegate : ICellReferenceDelegate
     {
-        private readonly IMeshPreloader _meshPreloader;
         private readonly MasterFileManager _masterFileManager;
         private readonly Random _random = new(DateTime.Now.Millisecond);
 
         private const ushort IsInteriorFlagMask = 0x0001;
         private const byte IsAutomaticFlagMask = 0x02;
 
-        public DoorDelegate(IMeshPreloader meshPreloader, MasterFileManager masterFileManager)
+        public DoorDelegate(MasterFileManager masterFileManager)
         {
-            _meshPreloader = meshPreloader;
             _masterFileManager = masterFileManager;
         }
 
@@ -45,12 +42,11 @@ namespace Core.MasterFile.Converter.Cell.Delegate.Reference
             var gameObj = new GameObject(door.EditorID ?? door.FormId.ToString(), resultBuilder.RootGameObject);
             var isAddedToUnprocessed = false;
 
-            //Try preloading the door model
+            //Try adding the door mesh component
             var modelInfo = door.ModelInfo;
             if (modelInfo != null)
             {
                 var meshInfo = modelInfo.ToMeshInfo(_masterFileManager);
-                _meshPreloader.PreloadMesh(meshInfo);
                 gameObj.Components.Add(new UnprocessedMeshComponent(meshInfo));
                 resultBuilder.UnprocessedGameObjects.Add(gameObj);
                 isAddedToUnprocessed = true;

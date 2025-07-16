@@ -21,7 +21,7 @@ namespace Core.Common.Converter
         public static void SkyrimPointToUnityPoint(in float3 vector, out float3 result)
         {
             SwapYZ(vector, out var swapped);
-            result = swapped * MeterInSkyrimUnits;
+            result = swapped / MeterInSkyrimUnits;
         }
 
         [BurstCompile]

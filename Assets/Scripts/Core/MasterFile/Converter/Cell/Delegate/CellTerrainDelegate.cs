@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
-using Core.Common.PreloadApis.Texture;
 using Core.Common.Structures;
 using Core.MasterFile.Converter.Cell.Delegate.Base;
 using Core.MasterFile.Manager;
@@ -94,7 +93,7 @@ namespace Core.MasterFile.Converter.Cell.Delegate
         }
     }
 
-    public class CellTerrainDelegate : ICellRecordDelegate<LAND>
+    public class CellTerrainDelegate : CellRecordDelegate<LAND>
     {
         private const int AlphaMapResolution = 128;
         private const int TerrainQuadrantResolution = AlphaMapResolution / 2;
@@ -110,7 +109,6 @@ namespace Core.MasterFile.Converter.Cell.Delegate
         private const string DefaultNormalMapPath = "Textures/Landscape/Dirt02_n.dds";
 
         private readonly MasterFileManager _masterFileManager;
-        private readonly ITexturePreloader _texturePreloader;
 
         private static List<RawTextureLayerInfo>[] GetRawLayerList(LAND record)
         {
@@ -157,7 +155,7 @@ namespace Core.MasterFile.Converter.Cell.Delegate
         private static List<RawMergedTextureLayerInfo> MergeTextureLayers(List<RawTextureLayerInfo>[] layers)
         {
             var layerCountPerQuadrant = layers.Select(list => list.Count).ToArray();
-            var indexLimit = layerCountPerQuadrant.Max() - 1;
+            var indexLimit = layerCountPerQuadrant.Max();
             //Indices to min layer count memo
             var memoizedLayerCount = new Dictionary<(int, int, int, int), int>();
             //Self-managed stack to avoid potential stack overflow
@@ -437,15 +435,14 @@ namespace Core.MasterFile.Converter.Cell.Delegate
             return (diffuseMapPath, normalMapPath);
         }
         
-        public CellTerrainDelegate(MasterFileManager masterFileManager, ITexturePreloader texturePreloader)
+        public CellTerrainDelegate(MasterFileManager masterFileManager)
         {
             _masterFileManager = masterFileManager;
-            _texturePreloader = texturePreloader;
         }
 
         public bool IsConcurrent => true;
 
-        public void ProcessRecord(RawCellData rawCellData, LAND record, CellInfoBuilder resultBuilder)
+        protected override void ProcessRecord(RawCellData rawCellData, LAND record, CellInfoBuilder resultBuilder)
         {
             var terrainMeshInfo = GetTerrainMeshInfo(record.VertexHeightMap);
             var rawLayers = GetRawLayerList(record);
@@ -456,14 +453,9 @@ namespace Core.MasterFile.Converter.Cell.Delegate
                 new TerrainLayer(textures.Item1, textures.Item2, float3.zero, new float3(2, 2, 2))).ToArray();
             var terrain = new Terrain(LandSideLengthInSamples, AlphaMapResolution, terrainMeshInfo.Size,
                 terrainMeshInfo.HeightMap, convertedLayers.AlphaMaps, terrainLayers);
-
-            foreach (var layer in terrainLayers)
-            {
-                _texturePreloader.PreloadTexture(TextureType.Diffuse, layer.DiffuseMapPath);
-                _texturePreloader.PreloadTexture(TextureType.Normal, layer.NormalMapPath);
-            }
             
             var gameObject = new GameObject("Terrain", resultBuilder.RootGameObject);
+            resultBuilder.UnprocessedGameObjects.Add(gameObject);
             gameObject.Components.Add(terrain);
             gameObject.Position = new float3(
                 Constants.SkyrimExteriorCellSideLengthInMeters * rawCellData.CellRecord.XGridPosition,

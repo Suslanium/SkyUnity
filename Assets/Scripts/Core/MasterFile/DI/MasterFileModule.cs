@@ -3,6 +3,11 @@ using System.IO;
 using Core.Common;
 using Core.Common.DI;
 using Core.MasterFile.Common.Structures;
+using Core.MasterFile.Converter.Cell;
+using Core.MasterFile.Converter.Cell.Delegate;
+using Core.MasterFile.Converter.Cell.Delegate.Base;
+using Core.MasterFile.Converter.Cell.Delegate.Reference;
+using Core.MasterFile.Converter.Cell.Delegate.Reference.Base;
 using Core.MasterFile.Manager;
 using Core.MasterFile.Manager.Extensions;
 using Core.MasterFile.Parser.Extensions;
@@ -68,6 +73,31 @@ namespace Core.MasterFile.DI
                 module.RegisterSingleton(container => new MasterFileManager(masterFilePaths,
                     container.Resolve<IFactory<MasterFile.Parser.MasterFile>>(),
                     container.Resolve<IFactory<IReadOnlyCollection<MasterFileManagerExtension>>>()));
+                
+                module.RegisterSingleton<IReadOnlyCollection<ICellDelegate>>(
+                    container => new List<ICellDelegate>
+                    {
+                        new CellLightingDelegate(container.Resolve<MasterFileManager>()),
+                    });
+                module.RegisterSingleton<IReadOnlyList<ICellReferenceDelegate>>(
+                    container => new List<ICellReferenceDelegate>
+                    {
+                        new StaticObjectDelegate(container.Resolve<MasterFileManager>()),
+                        new LightObjectDelegate(container.Resolve<MasterFileManager>()),
+                        new DoorDelegate(container.Resolve<MasterFileManager>()),
+                        new CocPositionDelegate(),
+                        new OcclusionCullingDelegate(),
+                    });
+                module.RegisterSingleton<IReadOnlyCollection<ICellRecordDelegate>>(
+                    container => new List<ICellRecordDelegate>
+                    {
+                        new CellTerrainDelegate(container.Resolve<MasterFileManager>()),
+                        new CellReferenceDelegateManager(container.Resolve<IReadOnlyList<ICellReferenceDelegate>>()),
+                    });
+                module.RegisterSingleton(
+                    container => new CellConverter(
+                        container.Resolve<IReadOnlyCollection<ICellDelegate>>(),
+                        container.Resolve<IReadOnlyCollection<ICellRecordDelegate>>()));
             });
         }
     }
