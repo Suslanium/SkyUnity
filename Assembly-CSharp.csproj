@@ -162,6 +162,15 @@
     <Compile Include="Assets/Scripts/Core/MasterFile/Parser/Reader/RecordTypeReaders/LANDReader.cs" />
     <Compile Include="Assets/Scripts/Core/Common/External/IonicZlib/Tree.cs" />
     <Compile Include="Assets/Scripts/Core/MasterFile/Parser/Reader/RecordTypeReaders/FURNReader.cs" />
+    <Compile Include="Assets\Scripts\Core\Resource\Archive\BsaFile.cs" />
+    <Compile Include="Assets\Scripts\Core\Resource\Archive\BsaParsingUtils.cs" />
+    <Compile Include="Assets\Scripts\Core\Resource\Archive\HashCalculator.cs" />
+    <Compile Include="Assets\Scripts\Core\Resource\Archive\Structures\Enums\ArchiveFlag.cs" />
+    <Compile Include="Assets\Scripts\Core\Resource\Archive\Structures\Enums\FileTypeFlag.cs" />
+    <Compile Include="Assets\Scripts\Core\Resource\Archive\Structures\FileRecord.cs" />
+    <Compile Include="Assets\Scripts\Core\Resource\Archive\Structures\FileRecordBlock.cs" />
+    <Compile Include="Assets\Scripts\Core\Resource\Archive\Structures\FolderRecord.cs" />
+    <Compile Include="Assets\Scripts\Core\Resource\Archive\Structures\Header.cs" />
     <Reference Include="UnityEngine">
       <HintPath>/Applications/Unity/Hub/Editor/6000.0.53f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
@@ -927,8 +936,6 @@
     <Reference Include="Unity.Mathematics">
       <HintPath>/Users/suslanium/RiderProjects/SkyUnity/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
